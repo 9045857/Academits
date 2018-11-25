@@ -63,9 +63,7 @@ namespace L1Range
                 double from = Math.Max(From, range.From);
                 double to = Math.Min(To, range.To);
 
-                Range tmpRange = new Range(from, to);
-
-                return tmpRange;
+                return new Range(from, to);
             }
             else
             {
