@@ -30,27 +30,27 @@ namespace L1Range
 
         public bool IsInside(double number) // крайние точки входят в интервал
         {
-            return ((number - From) >= -epsilon) && ((To - number) >= -epsilon);
+            return IsAMoreOrEqualB(number, From) && IsAMoreOrEqualB(To, number);
+        }
+
+        private bool IsAMoreB(double number1, double number2)
+        {
+            return (number1 - number2) > epsilon;
+        }
+
+        private bool IsAMoreOrEqualB(double number1, double number2)
+        {
+            return (number1 - number2) >= -epsilon;
         }
 
         private bool IsRangeOverlap(Range range) // нет наложения крайними точками интервалов 
         {
-            bool isRangeLeftFromThis = (From - range.To) >= -epsilon;
-            bool isRangeRightFromThis = (range.From - To) >= -epsilon;
-
-            bool IsNotRangeOverlap = isRangeLeftFromThis || isRangeRightFromThis;
-
-            return !IsNotRangeOverlap;
+            return !(IsAMoreOrEqualB(From, range.To) || IsAMoreOrEqualB(range.From, To));
         }
 
         private bool IsRangeOverlapWithEdges(Range range) // есть наложение крайними точками интервалов
         {
-            bool isRangeLeftFromThis = (From - range.To) > epsilon;
-            bool isRangeRightFromThis = (range.From - To) > epsilon;
-
-            bool IsNotRangeOverlap = isRangeLeftFromThis || isRangeRightFromThis;
-
-            return !IsNotRangeOverlap;
+            return !(IsAMoreB(From, range.To) || IsAMoreB(range.From, To));
         }
 
         // •Получение интервала-пересечения двух интервалов. Если пересечения нет, выдать null. 
@@ -103,15 +103,15 @@ namespace L1Range
                 return new Range[] { new Range(From, To) };
             }
 
-            if (((range.From - From) > epsilon) && ((range.To - To) > epsilon))
+            if (IsAMoreB(range.From, From) && IsAMoreB(range.To, To))
             {
                 return new Range[] { new Range(From, range.From) };
             }
-            else if (((range.From - From) > epsilon) && ((To - range.To) > epsilon))
+            else if (IsAMoreB(range.From, From) && IsAMoreB(To, range.To))
             {
                 return new Range[] { new Range(From, range.From), new Range(range.To, To) };
             }
-            else if (((From - range.From) > epsilon) && ((To - range.To) > epsilon))
+            else if (IsAMoreB(From, range.From) && IsAMoreB(To, range.To))
             {
                 return new Range[] { new Range(range.To, To) };
             }

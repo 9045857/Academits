@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace L2Shapes
 {
-    class Program
+    class Shapes
     {
-        static void Main(string[] args)
-        {
+        
 
-
- 
-        }
     }
 }
