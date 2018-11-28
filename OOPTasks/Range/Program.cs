@@ -78,8 +78,8 @@ namespace L1Range
 
             Console.WriteLine(" -= Метод рассчитывающий разность двух интервалов. =-");
 
-            range1 = new Range(12, 13);
-            range2 = new Range(11.5, 20.7);
+            range1 = new Range(12, 30);
+            range2 = new Range(12, 29);
 
             Range[] rangeDifference = range1.GetRangesDifference(range2);
 
