@@ -15,8 +15,6 @@ namespace L1Range
         public double From { get; set; }
         public double To { get; set; }
 
-        private const double epsilon = 1.0e-10;
-
         public Range(double from, double to) // from >= to. Пропишем корректное заполнение.
         {
             From = Math.Min(from, to);
@@ -52,13 +50,11 @@ namespace L1Range
             {
                 return null;
             }
-            else
-            {
-                double from = Math.Max(From, range.From);
-                double to = Math.Min(To, range.To);
 
-                return new Range(from, to);
-            }
+            double from = Math.Max(From, range.From);
+            double to = Math.Min(To, range.To);
+
+            return new Range(from, to);
         }
 
         //Получение объединения двух интервалов. Может получиться 1 или 2 отдельных куска
@@ -72,16 +68,14 @@ namespace L1Range
 
                 return new Range[] { new Range(from, to) };
             }
-            else
-            {
-                double from1 = Math.Min(From, range.From);
-                double to1 = Math.Min(To, range.To);
 
-                double from2 = Math.Max(From, range.From);
-                double to2 = Math.Max(To, range.To);
+            double from1 = Math.Min(From, range.From);
+            double to1 = Math.Min(To, range.To);
 
-                return new Range[] { new Range(from1, to1), new Range(from2, to2) };
-            }
+            double from2 = Math.Max(From, range.From);
+            double to2 = Math.Max(To, range.To);
+
+            return new Range[] { new Range(from1, to1), new Range(from2, to2) };
         }
 
         //•Получение разности двух интервалов. Может получиться 1 или 2 отдельных куска
