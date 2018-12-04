@@ -1,4 +1,6 @@
 using System;
+using L2Shapes.Shapes;
+using L2Shapes.ShapesComparers;
 
 namespace L2Shapes
 {
@@ -34,7 +36,8 @@ namespace L2Shapes
             Console.WriteLine();
 
             Console.WriteLine("-= 1-й объект по площади: =-");
-            Console.WriteLine("Класс {0} ({1}) с площадью {2} ", shapes[0].GetType(), shapes[0].GetName(), shapes[0].GetArea());
+            int lastIndex = shapes.Length - 1;
+            Console.WriteLine("Класс {0} ({1}) с площадью {2} ", shapes[lastIndex].GetType(), shapes[lastIndex].GetName(), shapes[lastIndex].GetArea());
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine();
 
@@ -45,7 +48,8 @@ namespace L2Shapes
             Console.WriteLine();
 
             Console.WriteLine("-= 2-й объект по длине периметра: =-");
-            Console.WriteLine("Класс {0} ({1}) с периметром {2} ", shapes[1].GetType(), shapes[1].GetName(), shapes[1].GetPerimeter());
+            int penultimateIndex = shapes.Length - 2;
+            Console.WriteLine("Класс {0} ({1}) с периметром {2} ", shapes[penultimateIndex].GetType(), shapes[penultimateIndex].GetName(), shapes[penultimateIndex].GetPerimeter());
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine();
 
