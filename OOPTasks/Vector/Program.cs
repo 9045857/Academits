@@ -10,7 +10,16 @@ namespace L2Vector
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World-1!");
+            double[] a = new double[10];
+            foreach (int element in a)
+            {
+                Console.WriteLine(element);
+            }
+
+            Vector v = new Vector(a);
+
+
+
         }
     }
 }

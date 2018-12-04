@@ -1,6 +1,6 @@
 using System;
 
-namespace L2Shapes
+namespace L2Shapes.Shapes
 {
     class Circle : IShape
     {

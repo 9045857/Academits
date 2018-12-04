@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace L2Shapes
+namespace L2Shapes.Shapes
 {
     class Triangle : IShape
     {
@@ -29,24 +29,24 @@ namespace L2Shapes
             Y3 = y3;
         }
 
-        private double GetRangeLength(double number1, double number2, double number3)
+        private static double GetRangeLength(double number1, double number2, double number3)
         {
             return Math.Max(Math.Max(number1, number2), number3) - Math.Min(Math.Min(number1, number2), number3);
         }
 
-        private double GetTwoNumbersSquaredDifference(double number1, double number2)
+        private static double GetTwoNumbersSquaredDifference(double number1, double number2)
         {
             return Math.Pow(number1 - number2, 2);
         }
 
-        private double GetSideLength(double point1XCoordinate, double point1YCoordinate, double point2XCoordinate, double point2YCoordinate)
+        private static double GetSideLength(double x1, double y1, double x2, double y2)
         {
-            return Math.Sqrt(GetTwoNumbersSquaredDifference(point1XCoordinate, point2XCoordinate) + GetTwoNumbersSquaredDifference(point1YCoordinate, point2YCoordinate));
+            return Math.Sqrt(GetTwoNumbersSquaredDifference(x1, x2) + GetTwoNumbersSquaredDifference(y1, y2));
         }
 
         public double GetArea()
         {
-            return Math.Abs(((X1 - X3) * (Y2 - Y3)) - ((Y1 - Y3) * (X2 - X3))) / 2;
+            return Math.Abs((X1 - X3) * (Y2 - Y3) - (Y1 - Y3) * (X2 - X3)) / 2;
         }
 
         public double GetHeight()

@@ -1,4 +1,4 @@
-﻿namespace L2Shapes
+﻿namespace L2Shapes.Shapes
 {
     class Rectangle : IShape
     {
