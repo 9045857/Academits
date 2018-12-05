@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace L2Vector
 {
@@ -16,6 +12,11 @@ namespace L2Vector
 
         public Vector(int n)
         {
+            if (n <= 0)
+            {
+                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(int n): Размерность n <= 0 ");
+            }
+
             coordinate = new double[n];
         }
 
@@ -26,7 +27,6 @@ namespace L2Vector
             for (int i = 0; i < vector.coordinate.Length; i++)
             {
                 coordinate[i] = vector.coordinate[i];
-                i++;
             }
         }
 
@@ -37,18 +37,22 @@ namespace L2Vector
             for (int i = 0; i < array.Length; i++)
             {
                 coordinate[i] = array[i];
-                i++;
             }
         }
 
 
         public Vector(int n, double[] array)
         {
+            if (n <= 0)
+            {
+                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(int n, double[] array): Размерность n <= 0 ");
+            }
+
             coordinate = new double[n];
 
             int minArrayLength = Math.Min(n, array.Length);
 
-            for (int i=0;i< minArrayLength; i++)
+            for (int i = 0; i < minArrayLength; i++)
             {
                 coordinate[i] = array[i];
             }
@@ -109,7 +113,6 @@ namespace L2Vector
             return new Vector(tmpCoordinate);
         }
 
-
         public Vector AddVector(Vector vector)
         {
             return GetVectorsAdditionPrivatMethod(this, vector);
@@ -151,13 +154,10 @@ namespace L2Vector
             return new Vector(tmpCoordinate);
         }
 
-
         public Vector SubtractVector(Vector vector)
         {
             return GetVectorsDifferencePrivateMethod(this, vector);
         }
-
-
 
         //c.Умножение вектора на скаляр        
         public Vector MultiplyBy(double number)
@@ -184,7 +184,7 @@ namespace L2Vector
         }
 
         //e.Получение длины вектора
-        private double GetLength()
+        public double GetLength()
         {
             double tmpLength = 0;
 
@@ -197,8 +197,25 @@ namespace L2Vector
         }
 
         //f.Получение и установка компоненты вектора по индексу
+        public double GetCoordinate(int index)
+        {
+            if (index < 0 || index >= coordinate.Length)
+            {
+                throw new IndexOutOfRangeException("Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора");
+            }
 
+            return coordinate[index];
+        }
 
+        public void SetCoordinate(int index, double value)
+        {
+            if (index < 0 || index >= coordinate.Length)
+            {
+                throw new IndexOutOfRangeException("Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты");
+            }
+
+            coordinate[index] = value;
+        }
 
         //g.Переопределить метод equals, чтобы был true  векторы имеют одинаковую размерность 
         // и соответствующие компоненты равны. 
@@ -246,21 +263,21 @@ namespace L2Vector
             return hash;
         }
 
-        //        5.	Реализовать статические методы – должны создаваться новые векторы:
+        //5. Реализовать статические методы – должны создаваться новые векторы:
         //a.Сложение двух векторов
-        public static Vector GetVectorsAddition(Vector vector1, Vector vector2)
+        public static Vector GetAddition(Vector vector1, Vector vector2)
         {
             return vector1.GetVectorsAdditionPrivatMethod(vector1, vector2);
         }
 
         //b.Вычитание векторов
-        public static Vector GetVectorsDifference(Vector vector1, Vector vector2)
+        public static Vector GetDifference(Vector vector1, Vector vector2)
         {
             return vector1.GetVectorsDifferencePrivateMethod(vector1, vector2);
         }
 
         //c.	Скалярное произведение векторов
-        public static double GetVectorScalarProduct(Vector vector1, Vector vector2)
+        public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
             int minVectorsLength = Math.Min(vector1.coordinate.Length, vector2.coordinate.Length);
 
