@@ -54,38 +54,50 @@ namespace L2Vector
                 //-сравниваем 2 пары векторов(равный и не равный)
                 Console.WriteLine("Сравнение векторов");
 
-                Console.WriteLine("({0}) = ({1}): {2}", vector1, vector4, vector1.Equals(vector4));
-                Console.WriteLine("({0}) = ({1}): {2}", vector2, vector3, vector2.Equals(vector3));
+                Console.WriteLine("{0} = {1}: {2}", vector1, vector4, vector1.Equals(vector4));
+                Console.WriteLine("{0} = {1}: {2}", vector2, vector3, vector2.Equals(vector3));
                 Console.WriteLine();
 
                 //-математические операции с векторами: сложение, вычитание, умножение, реверс.
                 Console.WriteLine("Математические операции - нестатические методы");
 
-                Console.WriteLine("vector1.AddVector(vector2)      ({0}) + ({1}) = ({2})", vector1, vector2, vector1.AddVector(vector2));
-                Console.WriteLine("vector2.SubtractVector(vector3) ({0}) - ({1}) = ({2})", vector2, vector3, vector2.SubtractVector(vector3));
-                Console.WriteLine("vector3.MultiplyBy(number)      ({0}) * {1} = ({2})", vector3, 3, vector3.MultiplyBy(3));
-                Console.WriteLine("vector4.Revers()                ({0})  вереверс -> ({1}) ", vector4, vector4.Revers());
+                Console.Write("vector1.AddVector(vector2)      {0} + {1} = ", vector1, vector2);
+                Console.WriteLine(vector1.AddVector(vector2));
+
+                Console.Write("vector2.SubtractVector(vector3) {0} - {1} = ", vector2, vector3);
+                Console.WriteLine(vector2.SubtractVector(vector3));
+
+                Console.Write("vector3.MultiplyBy(number)      {0} * {1} = ", vector3, 3);
+                Console.WriteLine(vector3.MultiplyBy(3));
+
+                Console.Write("vector4.Reverse()               {0}  вереверс -> ", vector4);
+                Console.WriteLine(vector4.Reverse());
 
                 Console.WriteLine();
 
                 //-проверяем статические методы сложения и т.п.
                 Console.WriteLine("Математические операции через статические методы");
 
-                Console.WriteLine("GetAddition(vector1, vector2)        ({0}) + ({1}) = ({2})", vector1, vector2, Vector.GetAddition(vector1, vector2));
-                Console.WriteLine("GetDifference(vector2, vector3)      ({0}) - ({1}) = ({2})", vector2, vector3, Vector.GetDifference(vector2, vector3));
-                Console.WriteLine("GetScalarProduct(vector1, vector3)   ({0}) * ({1}) = {2}", vector1, vector3, Vector.GetScalarProduct(vector1, vector3));
+                Console.WriteLine("GetAddition(vector1, vector2)        {0} + {1} = {2}", vector1, vector2, Vector.GetAddition(vector1, vector2));
+                Console.WriteLine("GetDifference(vector2, vector3)      {0} - {1} = {2}", vector2, vector3, Vector.GetDifference(vector2, vector3));
+                Console.WriteLine("GetScalarProduct(vector1, vector3)   {0} * {1} = {2}", vector1, vector3, Vector.GetScalarProduct(vector1, vector3));
 
                 Console.WriteLine();
 
                 //-проверяем исключения
 
                 //Vector vector5 = new Vector(-2); // исключение на отрицательную размерность вектора
-                Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора
+                //Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора
                 //Console.Write(vector1.GetCoordinate(100)); //"Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора"
-                //vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"
+                vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"
                 //vector1.SetCoordinate(100, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"
             }
             catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine();
+            }
+            catch (ArgumentException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine();

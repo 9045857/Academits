@@ -8,38 +8,41 @@ namespace L2Vector
     //  Vector(n, double[]) – заполнение вектора значениями из массива.Если длина массива меньше n, то считать что в остальных компонентах 0
     class Vector
     {
-        private double[] coordinate;
+        private double[] coordinates;
 
         public Vector(int n)
         {
             if (n <= 0)
             {
-                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(int n): Размерность n <= 0 ");
+                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(int n):  n <= 0 ");
             }
 
-            coordinate = new double[n];
+            coordinates = new double[n];
         }
 
         public Vector(Vector vector)
         {
-            coordinate = new double[vector.coordinate.Length];
-
-            for (int i = 0; i < vector.coordinate.Length; i++)
+            if (vector.coordinates.Length == 0)
             {
-                coordinate[i] = vector.coordinate[i];
+                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(Vector vector): размер массива координат не может быть равен 0 ");
             }
+
+            coordinates = new double[vector.coordinates.Length];
+
+            Array.Copy(vector.coordinates, coordinates, vector.coordinates.Length);
         }
 
         public Vector(double[] array)
         {
-            coordinate = new double[array.Length];
-
-            for (int i = 0; i < array.Length; i++)
+            if (array.Length == 0)
             {
-                coordinate[i] = array[i];
+                throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(double[] array): размер массива не может быть равен 0 ");
             }
-        }
 
+            coordinates = new double[array.Length];
+
+            Array.Copy(array, coordinates, array.Length);
+        }
 
         public Vector(int n, double[] array)
         {
@@ -48,115 +51,75 @@ namespace L2Vector
                 throw new IndexOutOfRangeException("Ошибка в конструкторе Vector(int n, double[] array): Размерность n <= 0 ");
             }
 
-            coordinate = new double[n];
+            coordinates = new double[n];
 
             int minArrayLength = Math.Min(n, array.Length);
 
             for (int i = 0; i < minArrayLength; i++)
             {
-                coordinate[i] = array[i];
-            }
-
-            if (n > minArrayLength)
-            {
-                for (int i = minArrayLength; i < n; i++)
-                {
-                    coordinate[i] = 0;
-                }
+                coordinates[i] = array[i];
             }
         }
 
         public int GetSize()
         {
-            return coordinate.Length;
+            return coordinates.Length;
         }
 
         public override string ToString()
         {
-            return string.Join(", ", coordinate);
+            return "{" + string.Join(", ", coordinates) + "}";
         }
 
-        //        4.	Реализовать нестатические методы:
-        //a.Прибавление к вектору другого вектора
-        private Vector GetVectorsAdditionPrivatMethod(Vector vector1, Vector vector2)
-        {
-            int maxVectorsLength = Math.Max(vector1.coordinate.Length, vector2.coordinate.Length);
-            int minVectorsLength = Math.Min(vector1.coordinate.Length, vector2.coordinate.Length);
+        //4. Реализовать нестатические методы:
+        //a.Прибавление к вектору другого вектора     
 
-            double[] tmpCoordinate = new double[maxVectorsLength];
+        public Vector AddVector(Vector vector)//TODO: передалать ретюрн. Разобраться со сложением
+        {
+            int maxVectorsLength = Math.Max(coordinates.Length, vector.coordinates.Length);
+            int minVectorsLength = Math.Min(coordinates.Length, vector.coordinates.Length);
 
             for (int i = 0; i < minVectorsLength; i++)
             {
-                tmpCoordinate[i] = vector1.coordinate[i] + vector2.coordinate[i];
+                coordinates[i] += vector.coordinates[i];
             }
 
-            if (maxVectorsLength == minVectorsLength)
+            if (maxVectorsLength == minVectorsLength || coordinates.Length == maxVectorsLength)
             {
-                return new Vector(tmpCoordinate);
+                return new Vector(coordinates);
             }
 
-            if (vector1.coordinate.Length == maxVectorsLength)
+            for (int i = minVectorsLength; i < maxVectorsLength; i++)
             {
-                for (int i = minVectorsLength; i < maxVectorsLength; i++)
-                {
-                    tmpCoordinate[i] = vector1.coordinate[i];
-                }
-            }
-            else
-            {
-                for (int i = minVectorsLength; i < maxVectorsLength; i++)
-                {
-                    tmpCoordinate[i] = vector2.coordinate[i];
-                }
+                coordinates[i] = vector.coordinates[i];
             }
 
-            return new Vector(tmpCoordinate);
+            return this;
         }
 
-        public Vector AddVector(Vector vector)
-        {
-            return GetVectorsAdditionPrivatMethod(this, vector);
-        }
-
-        //b.Вычитание из вектора другого вектора
-        public Vector GetVectorsDifferencePrivateMethod(Vector vector1, Vector vector2)
-        {
-            int maxVectorsLength = Math.Max(vector1.coordinate.Length, vector2.coordinate.Length);
-            int minVectorsLength = Math.Min(vector1.coordinate.Length, vector2.coordinate.Length);
-
-            double[] tmpCoordinate = new double[maxVectorsLength];
-
-            for (int i = 0; i < minVectorsLength; i++)
-            {
-                tmpCoordinate[i] = vector1.coordinate[i] - vector2.coordinate[i];
-            }
-
-            if (maxVectorsLength == minVectorsLength)
-            {
-                return new Vector(tmpCoordinate);
-            }
-
-            if (coordinate.Length == maxVectorsLength)
-            {
-                for (int i = minVectorsLength; i < maxVectorsLength; i++)
-                {
-                    tmpCoordinate[i] = vector1.coordinate[i];
-                }
-            }
-            else
-            {
-                for (int i = minVectorsLength; i < maxVectorsLength; i++)
-                {
-                    tmpCoordinate[i] = -vector2.coordinate[i];
-                }
-            }
-
-            return new Vector(tmpCoordinate);
-        }
+        //b.Вычитание из вектора другого вектора    
 
         public Vector SubtractVector(Vector vector)
         {
-            return GetVectorsDifferencePrivateMethod(this, vector);
+            int maxVectorsLength = Math.Max(coordinates.Length, vector.coordinates.Length);
+            int minVectorsLength = Math.Min(coordinates.Length, vector.coordinates.Length);
+
+            for (int i = 0; i < minVectorsLength; i++)
+            {
+                coordinates[i] -= vector.coordinates[i];
+            }
+
+            if (maxVectorsLength == minVectorsLength || coordinates.Length == maxVectorsLength)
+            {
+                return this;
+            }
+
+            for (int i = minVectorsLength; i < maxVectorsLength; i++)
+            {
+                coordinates[i] = -vector.coordinates[i];
+            }
+
+            return this;
         }
 
         //c.Умножение вектора на скаляр        
@@ -167,18 +130,16 @@ namespace L2Vector
 
         private Vector MultiplyByNumber(double number)
         {
-            double[] tmpCoordinate = new double[coordinate.Length];
-
-            for (int i = 0; i < coordinate.Length; i++)
+            for (int i = 0; i < coordinates.Length; i++)
             {
-                tmpCoordinate[i] = number * coordinate[i];
+                coordinates[i] *= number;
             }
 
-            return new Vector(tmpCoordinate);
+            return this;
         }
 
         //d.Разворот вектора (умножение всех компонент на -1)
-        public Vector Revers()
+        public Vector Reverse()
         {
             return MultiplyByNumber(-1);
         }
@@ -188,9 +149,9 @@ namespace L2Vector
         {
             double tmpLength = 0;
 
-            for (int i = 0; i < coordinate.Length; i++)
+            foreach (double element in coordinates)
             {
-                tmpLength += coordinate[i] * coordinate[i];
+                tmpLength += element * element;
             }
 
             return Math.Sqrt(tmpLength);
@@ -199,22 +160,22 @@ namespace L2Vector
         //f.Получение и установка компоненты вектора по индексу
         public double GetCoordinate(int index)
         {
-            if (index < 0 || index >= coordinate.Length)
+            if (index < 0 || index >= coordinates.Length)
             {
-                throw new IndexOutOfRangeException("Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора");
+                throw new ArgumentException("Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора");
             }
 
-            return coordinate[index];
+            return coordinates[index];
         }
 
         public void SetCoordinate(int index, double value)
         {
-            if (index < 0 || index >= coordinate.Length)
+            if (index < 0 || index >= coordinates.Length)
             {
-                throw new IndexOutOfRangeException("Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты");
+                throw new ArgumentException("Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты");
             }
 
-            coordinate[index] = value;
+            coordinates[index] = value;
         }
 
         //g.Переопределить метод equals, чтобы был true  векторы имеют одинаковую размерность 
@@ -233,14 +194,14 @@ namespace L2Vector
 
             Vector vector = (Vector)obj;
 
-            if (coordinate.Length != vector.coordinate.Length)
+            if (coordinates.Length != vector.coordinates.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < coordinate.Length; i++)
+            for (int i = 0; i < coordinates.Length; i++)
             {
-                if (coordinate[i] != vector.coordinate[i])
+                if (coordinates[i] != vector.coordinates[i])
                 {
                     return false;
                 }
@@ -255,7 +216,7 @@ namespace L2Vector
             int prime = 37;
             int hash = 1;
 
-            foreach (double element in coordinate)
+            foreach (double element in coordinates)
             {
                 hash = prime * hash + element.GetHashCode();
             }
@@ -267,25 +228,85 @@ namespace L2Vector
         //a.Сложение двух векторов
         public static Vector GetAddition(Vector vector1, Vector vector2)
         {
-            return vector1.GetVectorsAdditionPrivatMethod(vector1, vector2);
+            int maxVectorsLength = Math.Max(vector1.coordinates.Length, vector2.coordinates.Length);
+            int minVectorsLength = Math.Min(vector1.coordinates.Length, vector2.coordinates.Length);
+
+            Vector resultVector = new Vector(maxVectorsLength);
+
+            for (int i = 0; i < minVectorsLength; i++)
+            {
+                resultVector.coordinates[i] = vector1.coordinates[i] + vector2.coordinates[i];
+            }
+
+            if (maxVectorsLength == minVectorsLength)
+            {
+                return resultVector;
+            }
+
+            if (vector1.coordinates.Length == maxVectorsLength)
+            {
+                for (int i = minVectorsLength; i < maxVectorsLength; i++)
+                {
+                    resultVector.coordinates[i] = vector1.coordinates[i];
+                }
+            }
+            else
+            {
+                for (int i = minVectorsLength; i < maxVectorsLength; i++)
+                {
+                    resultVector.coordinates[i] = vector2.coordinates[i];
+                }
+            }
+
+            return resultVector;
         }
 
         //b.Вычитание векторов
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
-            return vector1.GetVectorsDifferencePrivateMethod(vector1, vector2);
+            int maxVectorsLength = Math.Max(vector1.coordinates.Length, vector2.coordinates.Length);
+            int minVectorsLength = Math.Min(vector1.coordinates.Length, vector2.coordinates.Length);
+
+            Vector resultVector = new Vector(maxVectorsLength);
+
+            for (int i = 0; i < minVectorsLength; i++)
+            {
+                resultVector.coordinates[i] = vector1.coordinates[i] - vector2.coordinates[i];
+            }
+
+            if (maxVectorsLength == minVectorsLength)
+            {
+                return resultVector;
+            }
+
+            if (vector1.coordinates.Length == maxVectorsLength)
+            {
+                for (int i = minVectorsLength; i < maxVectorsLength; i++)
+                {
+                    resultVector.coordinates[i] = vector1.coordinates[i];
+                }
+            }
+            else
+            {
+                for (int i = minVectorsLength; i < maxVectorsLength; i++)
+                {
+                    resultVector.coordinates[i] = -vector2.coordinates[i];
+                }
+            }
+
+            return resultVector;
         }
 
         //c.	Скалярное произведение векторов
         public static double GetScalarProduct(Vector vector1, Vector vector2)
         {
-            int minVectorsLength = Math.Min(vector1.coordinate.Length, vector2.coordinate.Length);
+            int minVectorsLength = Math.Min(vector1.coordinates.Length, vector2.coordinates.Length);
 
             double result = 0;
 
             for (int i = 0; i < minVectorsLength; i++)
             {
-                result += vector1.coordinate[i] * vector2.coordinate[i];
+                result += vector1.coordinates[i] * vector2.coordinates[i];
             }
 
             return result;
