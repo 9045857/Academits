@@ -86,22 +86,20 @@ namespace L2Vector
 
                 //-проверяем исключения
 
-                //Vector vector5 = new Vector(-2); // исключение на отрицательную размерность вектора//OverflowException
-                // Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора//OverflowException
+                //Vector vector5 = new Vector(-2); // исключение на отрицательную размерность вектора
+                // Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора
+                // Vector vector6 = new Vector(3, null);// исключение массив null
+                Vector vector6 = new Vector(3, new double[0]);// исключение на массив размером 0
+
                 // Console.Write(vector1.GetCoordinate(100)); //"Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора"//IndexOutOfRangeException
-                 vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"//IndexOutOfRangeException
+                // vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"//IndexOutOfRangeException
                 // vector1.SetCoordinate(100, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"//IndexOutOfRangeException
 
                 //vector1 = new Vector(-2);// OverflowException
                 // vector4 = new Vector(-4, new double[] { 1, 3, 5, 7, 9 });//System.OverflowException
 
             }
-            catch (IndexOutOfRangeException e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine();
-            }
-            catch (OverflowException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine();

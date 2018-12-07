@@ -15,7 +15,7 @@ namespace L2Vector
         {
             if (coordinatesCount <= 0)
             {
-                throw new OverflowException(String.Format(WarningStrings.VectorWithCoordinatesCountErrorMessage, coordinatesCount));
+                throw new ArgumentException(string.Format(WarningStrings.VectorWithCoordinatesCountErrorMessage, coordinatesCount));
             }
 
             coordinates = new double[coordinatesCount];
@@ -30,6 +30,15 @@ namespace L2Vector
 
         public Vector(double[] array)
         {
+            if (array == null)
+            {
+                throw new NullReferenceException(string.Format(WarningStrings.VectorWithNullArrayErrorMessage));
+            }
+            if (array.Length == 0)
+            {
+                throw new Exception(string.Format(WarningStrings.VectorWith0ArrayErrorMessage));
+            }
+
             coordinates = new double[array.Length];
 
             Array.Copy(array, coordinates, array.Length);
@@ -39,7 +48,15 @@ namespace L2Vector
         {
             if (coordinatesCount <= 0)
             {
-                throw new OverflowException(String.Format(WarningStrings.VectorWithCoordinatesCountAndArrayErrorMessage, coordinatesCount));
+                throw new ArgumentException(string.Format(WarningStrings.VectorWithCoordinatesCountAndArrayErrorMessage, coordinatesCount));
+            }
+            if (array == null)
+            {
+                throw new NullReferenceException(string.Format(WarningStrings.VectorWithCoordinatesCountAndNullArrayErrorMessage, coordinatesCount));
+            }
+            if (array.Length == 0)
+            {
+                throw new Exception(string.Format(WarningStrings.VectorWithCoordinatesCountAnd0ArrayErrorMessage, coordinatesCount));
             }
 
             coordinates = new double[coordinatesCount];
@@ -57,9 +74,15 @@ namespace L2Vector
         public override string ToString()
         {
             StringBuilder vectorStringBuilder = new StringBuilder();
-
             vectorStringBuilder.Append("{");
-            vectorStringBuilder.Append(String.Join(", ", coordinates));
+
+            for (int i=0;i<coordinates.Length-1;i++)
+            {
+                vectorStringBuilder.Append(coordinates[i]);
+                vectorStringBuilder.Append(", ");
+            }
+
+            vectorStringBuilder.Append(coordinates[coordinates.Length - 1]);
             vectorStringBuilder.Append("}");
 
             return vectorStringBuilder.ToString();
@@ -132,7 +155,7 @@ namespace L2Vector
         {
             if (index < 0 || index >= coordinates.Length)
             {
-                throw new IndexOutOfRangeException(String.Format(WarningStrings.GetCoordinateRangeErrorMessage, index, coordinates.Length - 1));
+                throw new IndexOutOfRangeException(string.Format(WarningStrings.GetCoordinateRangeErrorMessage, index, coordinates.Length - 1));
             }
 
             return coordinates[index];
@@ -142,7 +165,7 @@ namespace L2Vector
         {
             if (index < 0 || index >= coordinates.Length)
             {
-                throw new IndexOutOfRangeException(String.Format(WarningStrings.SetCoordinateRangeErrorMessage, index, coordinates.Length - 1));
+                throw new IndexOutOfRangeException(string.Format(WarningStrings.SetCoordinateRangeErrorMessage, index, coordinates.Length - 1));
             }
 
             coordinates[index] = value;

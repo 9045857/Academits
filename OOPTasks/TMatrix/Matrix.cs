@@ -20,16 +20,16 @@ namespace TMatrix
         private Vector[] vectors;
 
         //a.Matrix(m, n) – матрица нулей размера mxn
-        public Matrix(int m, int n)
+        public Matrix(int rowsCount, int columnsCount)
         {
             //TODO: сделать ошибку на отрицальные или нулевые n и m
             //int[,] array2Da = new int[4, 2] { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
 
-            vectors = new Vector[m];
+            vectors = new Vector[rowsCount];
 
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < rowsCount; i++)
             {
-                vectors[i] = new Vector(n);
+                vectors[i] = new Vector(columnsCount);
             }
         }
 
@@ -82,28 +82,64 @@ namespace TMatrix
         //j.Вычитание матриц
 
         //a.Получение размеров матрицы
-        public int GetRowCount(Matrix matrix) //эквивалентно количеству векторов
+        public int GetRowsCount(Matrix matrix) //эквивалентно количеству векторов
         {
             return matrix.vectors.Length;
         }
 
-        public int GetColumnCount(Matrix matrix) //эквивалентно количеству координат в векторе
+        public int GetColumnsCount(Matrix matrix) //эквивалентно количеству координат в векторе
         {
             return matrix.vectors[0].GetSize();
         }
 
         //b.Получение и задание вектора-строки по индексу
-                public Vector GetVector(int index)
+        public Vector GetRowVector(int index)
         {
             return vectors[index];
         }
 
-        public void SetVector(int index, Vector vector)
+        public void SetRowVector(int index, Vector vector)
         {
-            vectors[index] = new Vector(vector); //был бы метод копирования векторов, сделал бы через него. без него делаю через конструктор            
+            vectors[index] = new Vector(vector); //был бы метод копирования векторов, сделал бы через него. без него делаю через конструктор, можно ли так?           
+        }
+
+        //c.Получение вектора-столбца по индексу
+        public Vector GetColumnVector(int index)//TODO: исключение на индекс вне массива
+        {
+            int vectorCoordinatesCount = GetRowsCount(this);
+
+            Vector vector = new Vector(vectorCoordinatesCount);
+
+            for (int i = 0; i < vectorCoordinatesCount; i++)
+            {                
+                   vector.SetCoordinate(i, vectors[i].GetCoordinate(index));
+            }
+
+            return vector;
         }
 
         //d.Транспонирование матрицы
+        public Matrix Transposition()
+        {
+            int thisColumnsCount = GetColumnsCount(this);
+            int thisRowsCount = GetRowsCount(this);
+
+            Matrix transposedMatrix = new Matrix(thisColumnsCount, thisRowsCount);
+
+            for (int i = 0; i < thisColumnsCount; i++)
+            {
+                transposedMatrix.SetRowVector(i, this.GetColumnVector(i));
+            }
+                      
+            return transposedMatrix;
+        }
+
+
+
+        //e.Умножение на скаляр
+        //f.Вычисление определителя матрицы
+        //g.toString определить так, чтобы результат получался в таком виде: { { 1, 2 }, { 2, 3 } }
+        //h.умножение матрицы на вектор
 
     }
 }
