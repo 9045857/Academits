@@ -24,7 +24,7 @@ namespace L2Vector
                 Vector vector1 = new Vector(6);
                 Vector vector2 = new Vector(new double[] { 10, 1, 10, 0 });
                 Vector vector3 = new Vector(vector2);
-                Vector vector4 = new Vector(4, new double[] { 1, 3, 5, 7, 9 });
+                Vector vector4 = new Vector(7, new double[] { 1, 3, 5, 7 });
 
                 Console.WriteLine("Задаем векторы");
                 Console.WriteLine("Vector(int n)                  {0}", vector1);
@@ -61,8 +61,8 @@ namespace L2Vector
                 //-математические операции с векторами: сложение, вычитание, умножение, реверс.
                 Console.WriteLine("Математические операции - нестатические методы");
 
-                Console.Write("vector1.AddVector(vector2)      {0} + {1} = ", vector1, vector2);
-                Console.WriteLine(vector1.AddVector(vector2));
+                Console.Write("vector2.AddVector(vector1)      {0} + {1} = ", vector2, vector1);
+                Console.WriteLine(vector2.AddVector(vector1));
 
                 Console.Write("vector2.SubtractVector(vector3) {0} - {1} = ", vector2, vector3);
                 Console.WriteLine(vector2.SubtractVector(vector3));
@@ -86,18 +86,22 @@ namespace L2Vector
 
                 //-проверяем исключения
 
-                //Vector vector5 = new Vector(-2); // исключение на отрицательную размерность вектора
-                //Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора
-                //Console.Write(vector1.GetCoordinate(100)); //"Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора"
-                vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"
-                //vector1.SetCoordinate(100, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"
+                //Vector vector5 = new Vector(-2); // исключение на отрицательную размерность вектора//OverflowException
+                // Vector vector6 = new Vector(-3, new double[] { 1, 3, 5, 7, 9 });// исключение на отрицательную размерность вектора//OverflowException
+                // Console.Write(vector1.GetCoordinate(100)); //"Ошибка в GetCoordinate(int index): привышение в запросе размерности вектора"//IndexOutOfRangeException
+                 vector1.SetCoordinate(-1, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"//IndexOutOfRangeException
+                // vector1.SetCoordinate(100, 12);  //"Ошибка в SetCoordinate(int index,double value): привышение размерности вектора при задании координаты"//IndexOutOfRangeException
+
+                //vector1 = new Vector(-2);// OverflowException
+                // vector4 = new Vector(-4, new double[] { 1, 3, 5, 7, 9 });//System.OverflowException
+
             }
             catch (IndexOutOfRangeException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
             }
-            catch (ArgumentException e)
+            catch (OverflowException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine();
