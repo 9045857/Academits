@@ -10,12 +10,16 @@ namespace TMatrix
     {
         static void Main(string[] args)
         {
-            int[][]a= new int[2][];
-            a[0] = new int[20];
-            a[1] = new int[25];
+            double[][] array = new double[4][];
+            array[0] =new double[3]{ 1, 2, 3 };
+            array[1] = new double[3] { 2, 2, 2 };
+            array[2] = new double[3] { 5, 5, 5 };
+            array[3] = new double[3] { 1, 5, 7 };
+
+            Matrix matrix = new Matrix(array);
 
 
-            Console.WriteLine(a.Length);
+            Console.WriteLine(matrix);
         }
     }
 }

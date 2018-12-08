@@ -82,14 +82,14 @@ namespace TMatrix
         //j.Вычитание матриц
 
         //a.Получение размеров матрицы
-        public int GetRowsCount(Matrix matrix) //эквивалентно количеству векторов
+        public int GetRowsCount() //эквивалентно количеству векторов
         {
-            return matrix.vectors.Length;
+            return vectors.Length;
         }
 
-        public int GetColumnsCount(Matrix matrix) //эквивалентно количеству координат в векторе
+        public int GetColumnsCount() //эквивалентно количеству координат в векторе
         {
-            return matrix.vectors[0].GetSize();
+            return vectors[0].GetSize();
         }
 
         //b.Получение и задание вектора-строки по индексу
@@ -106,40 +106,121 @@ namespace TMatrix
         //c.Получение вектора-столбца по индексу
         public Vector GetColumnVector(int index)//TODO: исключение на индекс вне массива
         {
-            int vectorCoordinatesCount = GetRowsCount(this);
+            int vectorCoordinatesCount = GetRowsCount();
 
             Vector vector = new Vector(vectorCoordinatesCount);
 
             for (int i = 0; i < vectorCoordinatesCount; i++)
-            {                
-                   vector.SetCoordinate(i, vectors[i].GetCoordinate(index));
+            {
+                vector.SetCoordinate(i, vectors[i].GetCoordinate(index));
             }
 
             return vector;
         }
 
         //d.Транспонирование матрицы
-        public Matrix Transposition()
+        public Matrix Transpose()
         {
-            int thisColumnsCount = GetColumnsCount(this);
-            int thisRowsCount = GetRowsCount(this);
+            int columnsCount = GetColumnsCount();
+            int rowsCount = GetRowsCount();
 
-            Matrix transposedMatrix = new Matrix(thisColumnsCount, thisRowsCount);
+            Matrix transposedMatrix = new Matrix(columnsCount, rowsCount);
 
-            for (int i = 0; i < thisColumnsCount; i++)
+            for (int i = 0; i < columnsCount; i++)
             {
-                transposedMatrix.SetRowVector(i, this.GetColumnVector(i));
+                transposedMatrix.SetRowVector(i, GetColumnVector(i));
             }
-                      
+
             return transposedMatrix;
         }
 
-
-
         //e.Умножение на скаляр
+        public Matrix MultiplyOnScalar(double multiplier)
+        {
+            int rowsCount = GetRowsCount();
+            int columnsCount = GetColumnsCount();
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                for (int j = 0; j < columnsCount; j++)
+                {
+                    double multipliedCoordinate = multiplier * vectors[i].GetCoordinate(j);
+                    vectors[i].SetCoordinate(j, multipliedCoordinate);
+                }
+            }
+
+            return this;
+        }
+
         //f.Вычисление определителя матрицы
+        public double GetDeterminant()
+        {
+            int rowsCount = GetRowsCount();
+            int columnsCount = GetColumnsCount();
+
+            double[,] matrix = new double[rowsCount, columnsCount];
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                for (int j = 0; j < columnsCount; j++)
+                {
+                    matrix[i, j] = vectors[i].GetCoordinate(j);
+                }
+            }
+
+            return Determinant.GetDeterminant(matrix);
+        }
+
         //g.toString определить так, чтобы результат получался в таком виде: { { 1, 2 }, { 2, 3 } }
+
+        public override string ToString()
+        {
+            int rowsCount = GetRowsCount();
+            int columnsCount = GetColumnsCount();
+
+            StringBuilder matrixStringBilder = new StringBuilder();
+            matrixStringBilder.Append("{");
+
+            int lastIndex = 1;
+
+            for (int i = 0; i < rowsCount - lastIndex; i++)
+            {
+                matrixStringBilder.Append("{");
+                for (int j = 0; j < columnsCount - lastIndex; j++)
+                {
+                    matrixStringBilder.Append(vectors[i].GetCoordinate(j));
+                    matrixStringBilder.Append(", ");
+                }
+                matrixStringBilder.Append(vectors[i].GetCoordinate(columnsCount - lastIndex));
+                matrixStringBilder.Append("}, ");
+            }
+
+            matrixStringBilder.Append("{");
+            for (int j = 0; j < columnsCount - lastIndex; j++)
+            {
+                matrixStringBilder.Append(vectors[rowsCount - lastIndex].GetCoordinate(j));
+                matrixStringBilder.Append(", ");
+            }
+            matrixStringBilder.Append(vectors[rowsCount - lastIndex].GetCoordinate(columnsCount - lastIndex));
+            matrixStringBilder.Append("}}");
+
+            return matrixStringBilder.ToString();
+        }
+
         //h.умножение матрицы на вектор
+
+        public Vector MultiplyByVector(Vector vector)
+        {
+
+
+
+            return null;
+        }
+
+        //i.Сложение матриц
+        //j.Вычитание матриц
+
+
 
     }
 }
