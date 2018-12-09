@@ -11,7 +11,7 @@
         internal const string MatrixVectorsArrayNullСonstructorErrorMessage = "Ошибка в конструкторе Matrix(vectorsArray): vectorsArray = null.";
         internal const string MatrixVectorsArray0ConstructorErrorMessage = "Ошибка в конструкторе Matrix(vectorsArray): длина массива = 0.";
 
-        internal const string IndexNegativeOrNullErrorsMessage = "Ошибка Index = {0}: индекс <= 0.";
+        internal const string IndexNegativeErrorsMessage = "Ошибка Index = {0}: индекс < 0.";
 
         internal const string VectorNullErrorMessage = "Ошибка: vector = null.";
         internal const string VectorCoordanates0ErrorMessage = "Ошибка: длина массива координат = 0.";
@@ -31,6 +31,8 @@
 
         internal const string MatricesDifferentSizesErrorMessage = "Ошибка: матрицы имеют разные размеры.";
 
-        internal const string MatricesSizesForMultiplyErrorMessage = "Ошибка: матрицы имеют не согласованные размеры.";
+        internal const string MatricesSizesForMultiplyErrorMessage = "Ошибка: {0} столбцов в матрице1, {1} строк в матрице2 - несогласованный размер.";
+
+        internal const string MatrixNotSquareErrorMessage = "Ошибка: у матрицы {0}x{1} разные количества строк и столбцов.";
     }
 }

@@ -76,7 +76,7 @@ namespace L2Vector
             StringBuilder vectorStringBuilder = new StringBuilder();
             vectorStringBuilder.Append("{");
 
-            for (int i=0;i<coordinates.Length-1;i++)
+            for (int i = 0; i < coordinates.Length - 1; i++)
             {
                 vectorStringBuilder.Append(coordinates[i]);
                 vectorStringBuilder.Append(", ");
@@ -245,6 +245,13 @@ namespace L2Vector
             }
 
             return scalarProduct;
+        }
+
+        //изменить длину массива координат вектора
+        public Vector Resize(int newSize)
+        {
+            Array.Resize(ref coordinates, newSize);
+            return this;
         }
     }
 }
