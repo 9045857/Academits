@@ -38,6 +38,18 @@ namespace TMatrix
                 Console.Write("Matrix(array[][]):    ");
                 Console.WriteLine(matrix3);
 
+                double[][] array = new double[4][];
+                array[0] = new double[3] { 1, 2, 3 };
+                array[1] = new double[2] { 2, 2 };
+                array[2] = new double[3] { 5, 5, 5 };
+                array[3] = new double[1] { 1 };
+
+                Matrix matrix3_1 = new Matrix(array);
+
+                Console.Write("Matrix(array[][]) с разными массивами:    ");
+                Console.WriteLine(matrix3_1);
+
+
                 Matrix matrix4 = new Matrix(matrix3);
                 Console.Write("Matrix(matrix):       ");
                 Console.WriteLine(matrix3);
@@ -90,6 +102,7 @@ namespace TMatrix
 
                 //d.Транспонирование матрицы
                 Console.WriteLine("Результат транспонирования:   {0}", matrix5.Transpose());
+                Console.WriteLine("Результат транспонирования:   {0}", matrix5.Transpose());
 
                 //e.Умножение на скаляр
                 double scalar = 10.2;
@@ -140,15 +153,6 @@ namespace TMatrix
                 Console.WriteLine();
                 Console.WriteLine("Тестирование исключений");
 
-                double[][] array = new double[4][];
-                array[0] = new double[3] { 1, 2, 3 };
-                array[1] = new double[2] { 2, 2 };
-                array[2] = new double[3] { 5, 5, 5 };
-                array[3] = new double[1] { 1 };
-
-                Matrix matrix = new Matrix(array);
-
-                Console.WriteLine(matrix);
             }
             catch (Exception e)
             {

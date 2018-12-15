@@ -12,6 +12,7 @@
         internal const string MatrixVectorsArray0ConstructorErrorMessage = "Ошибка в конструкторе Matrix(vectorsArray): длина массива = 0.";
 
         internal const string IndexNegativeErrorsMessage = "Ошибка Index = {0}: индекс < 0.";
+        internal const string IndexInRangeErrorsMessage = "Ошибка Index = {0}: индекс < 0 или >= {1}.";
 
         internal const string VectorNullErrorMessage = "Ошибка: vector = null.";
         internal const string VectorCoordanates0ErrorMessage = "Ошибка: длина массива координат = 0.";
@@ -25,7 +26,6 @@
 
         internal const string ArraysArrayNullErrorMessage = "Ошибка: массив = null.";
         internal const string ArraysArrayCount0ErrorMessage = "Ошибка: количество массивов в массиве = 0.";
-        internal const string ArraysDifferentLengthsAraysArrayErrorsMessage = "Ошибка: массивы в массиве имеют разную длину.";
 
         internal const string VectorAndMatrixDifferentSizesWhenMultiplyErrorMessage = "Ошибка: при умножении матрица и вектор имеют соответствующие разные размеры.";
 

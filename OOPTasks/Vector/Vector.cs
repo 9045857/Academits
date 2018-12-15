@@ -253,5 +253,18 @@ namespace L2Vector
             Array.Resize(ref coordinates, newSize);
             return this;
         }
+
+        //копирование вектора
+        public static void Copy(Vector sourceArray, Vector destinationArray)
+        {
+            int vectorLength = sourceArray.GetSize();
+
+            if (destinationArray.GetSize() != vectorLength)
+            {
+                Array.Resize(ref destinationArray.coordinates, vectorLength);
+            }
+
+            Array.Copy(sourceArray.coordinates, destinationArray.coordinates, vectorLength);
+        }
     }
 }
