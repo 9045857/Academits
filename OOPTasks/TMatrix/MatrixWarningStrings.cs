@@ -29,6 +29,8 @@
 
         internal const string VectorAndMatrixDifferentSizesWhenMultiplyErrorMessage = "Ошибка: при умножении матрица и вектор имеют соответствующие разные размеры.";
 
+        internal const string VectorLengthMoreMatrixErrorsMessage = "Ошибка: размер вектора ({0}) отличается от количества стобцов матрицы ({1}).";
+
         internal const string MatricesDifferentSizesErrorMessage = "Ошибка: матрицы имеют разные размеры.";
 
         internal const string MatricesSizesForMultiplyErrorMessage = "Ошибка: {0} столбцов в матрице1, {1} строк в матрице2 - несогласованный размер.";

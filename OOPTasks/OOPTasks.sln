@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMatrix", "TMatrix\TMatrix.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test2", "test2\test2.csproj", "{75FDD124-55C1-4ADF-ACB0-0873290B2EB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TArrayListHome", "TList\TArrayListHome.csproj", "{1B481441-56A0-480B-988C-F9494A4E4360}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{75FDD124-55C1-4ADF-ACB0-0873290B2EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FDD124-55C1-4ADF-ACB0-0873290B2EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FDD124-55C1-4ADF-ACB0-0873290B2EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B481441-56A0-480B-988C-F9494A4E4360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B481441-56A0-480B-988C-F9494A4E4360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B481441-56A0-480B-988C-F9494A4E4360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B481441-56A0-480B-988C-F9494A4E4360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

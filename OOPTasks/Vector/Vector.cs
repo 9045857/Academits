@@ -255,16 +255,14 @@ namespace L2Vector
         }
 
         //копирование вектора
-        public static void Copy(Vector sourceArray, Vector destinationArray)
+        public static void Copy(Vector sourceArray, Vector destinationArray, int copyLength)
         {
-            int vectorLength = sourceArray.GetSize();
-
-            if (destinationArray.GetSize() != vectorLength)
+            if (destinationArray.GetSize() > copyLength)
             {
-                Array.Resize(ref destinationArray.coordinates, vectorLength);
+                Array.Resize(ref destinationArray.coordinates, copyLength);
             }
 
-            Array.Copy(sourceArray.coordinates, destinationArray.coordinates, vectorLength);
+            Array.Copy(sourceArray.coordinates, 0, destinationArray.coordinates, 0, copyLength);
         }
     }
 }

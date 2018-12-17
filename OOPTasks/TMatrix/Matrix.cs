@@ -13,7 +13,7 @@ namespace TMatrix
         //c.Matrix(double[][]) – из двумерного массива
         //d.Matrix(Vector[]) – из массива векторов-строк
 
-        private Vector[] vectorsRows;
+        private Vector[] rows;
 
         //a.Matrix(m, n) – матрица нулей размера mxn
         public Matrix(int rowsCount, int columnsCount)
@@ -23,25 +23,22 @@ namespace TMatrix
                 throw new Exception(string.Format(MatrixWarningStrings.MatrixRowsCountAndColumnsCountСonstructorErrorMessage, rowsCount, columnsCount));
             }
 
-            vectorsRows = new Vector[rowsCount];
+            rows = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
-                vectorsRows[i] = new Vector(columnsCount);
+                rows[i] = new Vector(columnsCount);
             }
         }
 
         //b.Matrix(Matrix) – конструктор копирования
         public Matrix(Matrix matrix)
         {
-            string methodName = "Matrix(matrix)";
-            CheckMatrixNullErrors(methodName, matrix);
+            rows = new Vector[matrix.rows.Length];
 
-            vectorsRows = new Vector[matrix.vectorsRows.Length];
-
-            for (int i = 0; i < matrix.vectorsRows.Length; i++)
+            for (int i = 0; i < matrix.rows.Length; i++)
             {
-                vectorsRows[i] = new Vector(matrix.vectorsRows[i]);
+                rows[i] = new Vector(matrix.rows[i]);
             }
         }
 
@@ -83,15 +80,15 @@ namespace TMatrix
             int rowsCount = array.GetLength(0);
             int columnsCount = array.GetLength(1);
 
-            vectorsRows = new Vector[rowsCount];
+            rows = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
-                vectorsRows[i] = new Vector(columnsCount);
+                rows[i] = new Vector(columnsCount);
 
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    vectorsRows[i].SetCoordinate(j, array[i, j]);
+                    rows[i].SetCoordinate(j, array[i, j]);
                 }
             }
         }
@@ -124,12 +121,15 @@ namespace TMatrix
             int rowsCount = arraysArray.Length;
             int columnsCount = GetMaxArraysArrayLength(arraysArray);
 
-            vectorsRows = new Vector[rowsCount];
+            rows = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
-                Array.Resize(ref arraysArray[i], columnsCount);
-                vectorsRows[i] = new Vector(arraysArray[i]);
+                double[] tmpArray = new double[columnsCount];
+
+                Array.Copy(arraysArray[i], 0, tmpArray, 0, arraysArray[i].Length);
+
+                rows[i] = new Vector(tmpArray);
             }
         }
 
@@ -171,12 +171,12 @@ namespace TMatrix
             int rowsCount = vectorsArray.Length;
             int columnsCount = GetMaxVectorsArrayLength(vectorsArray);
 
-            vectorsRows = new Vector[vectorsArray.Length];
+            rows = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
             {
-                vectorsArray[i].Resize(columnsCount);
-                vectorsRows[i] = new Vector(vectorsArray[i]);
+                rows[i] = new Vector(columnsCount);
+                Vector.Copy(vectorsArray[i], rows[i], vectorsArray[i].GetSize());
             }
         }
 
@@ -226,12 +226,12 @@ namespace TMatrix
         //a.Получение размеров матрицы
         public int GetRowsCount() //эквивалентно количеству векторов
         {
-            return vectorsRows.Length;
+            return rows.Length;
         }
 
         public int GetColumnsCount() //эквивалентно количеству координат в векторе
         {
-            return vectorsRows[0].GetSize();
+            return rows[0].GetSize();
         }
 
         //b.Получение и задание вектора-строки по индексу
@@ -240,9 +240,7 @@ namespace TMatrix
             string methodName = "GetRowVector(int index)";
             CheckIndexInRangeErrors(methodName, GetRowsCount(), index);
 
-            Vector vector = new Vector(vectorsRows[index]);
-
-            return vector;
+            return new Vector(rows[index]);
         }
 
         private static void CheckIndexInRangeErrors(string methodName, int maxRangeValue, int index)
@@ -258,22 +256,16 @@ namespace TMatrix
         {
             string methodName = "SetRowVector(int index, Vector vector)";
             CheckIndexInRangeErrors(methodName, GetRowsCount(), index);
-            CheckVectorsNullErrors(methodName, vector);
+            CheckVectorLengthError(methodName, GetColumnsCount(), vector.GetSize());
 
-            Vector.Copy(vector, vectorsRows[index]);
+            rows[index] = new Vector(vector);
         }
 
-        private static void CheckVectorsNullErrors(string methodName, Vector vector)
+        private void CheckVectorLengthError(string methodName, int matrixColumnsCount, int vectorSize)
         {
-            if (vector == null)
+            if (matrixColumnsCount != vectorSize)
             {
-                string errorString = string.Format(MatrixWarningStrings.MatrixVectorsArrayNullСonstructorErrorMessage);
-                throw new Exception(GetErrorDescription(methodName, errorString));
-            }
-
-            if (vector.GetLength() == 0)
-            {
-                string errorString = string.Format(MatrixWarningStrings.MatrixVectorsArray0ConstructorErrorMessage);
+                string errorString = string.Format(MatrixWarningStrings.VectorLengthMoreMatrixErrorsMessage, matrixColumnsCount, vectorSize);
                 throw new Exception(GetErrorDescription(methodName, errorString));
             }
         }
@@ -290,7 +282,7 @@ namespace TMatrix
 
             for (int i = 0; i < vectorCoordinatesCount; i++)
             {
-                vector.SetCoordinate(i, vectorsRows[i].GetCoordinate(index));
+                vector.SetCoordinate(i, rows[i].GetCoordinate(index));
             }
 
             return vector;
@@ -300,7 +292,7 @@ namespace TMatrix
         public Matrix Transpose()
         {
             int columnsCount = GetColumnsCount();
-            int rowsCount = GetRowsCount();
+            //  int rowsCount = GetRowsCount();
 
             Vector[] tmpVectorsArray = new Vector[columnsCount];
 
@@ -309,20 +301,11 @@ namespace TMatrix
                 tmpVectorsArray[i] = new Vector(GetColumnVector(i));
             }
 
-            Array.Resize(ref vectorsRows, columnsCount);
+            Array.Resize(ref rows, columnsCount);
 
-            int minNumberForCycle = columnsCount <= rowsCount ? columnsCount : rowsCount;
-            int maxNumberForCycle = columnsCount;
-
-            for (int i = 0; i < minNumberForCycle; i++)
+            for (int i = 0; i < columnsCount; i++)
             {
-                Vector.Copy(tmpVectorsArray[i], vectorsRows[i]);
-            }
-
-            for (int i = minNumberForCycle; i < maxNumberForCycle; i++)
-            {
-                vectorsRows[i] = new Vector(rowsCount);
-                Vector.Copy(tmpVectorsArray[i], vectorsRows[i]);
+                rows[i] = tmpVectorsArray[i];
             }
 
             return this;
@@ -333,9 +316,9 @@ namespace TMatrix
         {
             int rowsCount = GetRowsCount();
 
-            for (int i = 0; i < rowsCount; i++)
+            foreach (Vector row in rows)
             {
-                vectorsRows[i].MultiplyBy(multiplier);
+                row.MultiplyBy(multiplier);
             }
 
             return this;
@@ -356,7 +339,7 @@ namespace TMatrix
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    array[i, j] = vectorsRows[i].GetCoordinate(j);
+                    array[i, j] = rows[i].GetCoordinate(j);
                 }
             }
 
@@ -382,27 +365,14 @@ namespace TMatrix
             matrixStringBilder.Append("{ ");
 
             int lastIndex = 1;
-
             for (int i = 0; i < rowsCount - lastIndex; i++)
             {
-                matrixStringBilder.Append("{");
-                for (int j = 0; j < columnsCount - lastIndex; j++)
-                {
-                    matrixStringBilder.Append(vectorsRows[i].GetCoordinate(j));
-                    matrixStringBilder.Append(", ");
-                }
-                matrixStringBilder.Append(vectorsRows[i].GetCoordinate(columnsCount - lastIndex));
-                matrixStringBilder.Append("}, ");
-            }
-
-            matrixStringBilder.Append("{");
-            for (int j = 0; j < columnsCount - lastIndex; j++)
-            {
-                matrixStringBilder.Append(vectorsRows[rowsCount - lastIndex].GetCoordinate(j));
+                matrixStringBilder.Append(rows[i].ToString());
                 matrixStringBilder.Append(", ");
             }
-            matrixStringBilder.Append(vectorsRows[rowsCount - lastIndex].GetCoordinate(columnsCount - lastIndex));
-            matrixStringBilder.Append("} }");
+
+            matrixStringBilder.Append(rows[rowsCount - lastIndex].ToString());
+            matrixStringBilder.Append(" }");
 
             return matrixStringBilder.ToString();
         }
@@ -411,8 +381,6 @@ namespace TMatrix
         public Vector MultiplyByVector(Vector vector)
         {
             string methodName = "MultiplyByVector(Vector vector)";
-
-            CheckVectorsNullErrors(methodName, vector);
             CheckVectorLengthForMultiplyByMatrixErrors(methodName, this, vector);
 
             int rowsCount = GetRowsCount();
@@ -463,11 +431,7 @@ namespace TMatrix
 
             for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < columnsCount; j++)
-                {
-                    double newCoordinate = vectorsRows[i].GetCoordinate(j) + addedMatrix.vectorsRows[i].GetCoordinate(j);
-                    vectorsRows[i].SetCoordinate(j, newCoordinate);
-                }
+                rows[i].AddVector(addedMatrix.rows[i]);
             }
 
             return this;
@@ -494,11 +458,7 @@ namespace TMatrix
 
             for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < columnsCount; j++)
-                {
-                    double newCoordinate = vectorsRows[i].GetCoordinate(j) - subtrahendMatrix.vectorsRows[i].GetCoordinate(j);
-                    vectorsRows[i].SetCoordinate(j, newCoordinate);
-                }
+                rows[i].SubtractVector(subtrahendMatrix.rows[i]);
             }
 
             return this;
@@ -552,8 +512,8 @@ namespace TMatrix
             {
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    double newCoordinate = Vector.GetScalarProduct(matrix1.vectorsRows[i], matrix2.GetColumnVector(j));
-                    productMatrix.vectorsRows[i].SetCoordinate(j, newCoordinate);
+                    double newCoordinate = Vector.GetScalarProduct(matrix1.rows[i], matrix2.GetColumnVector(j));
+                    productMatrix.rows[i].SetCoordinate(j, newCoordinate);
                 }
             }
 
@@ -562,12 +522,12 @@ namespace TMatrix
 
         private static void CheckMatricesSizesForMultiplyErrors(string methodName, Matrix matrix1, Matrix matrix2)
         {
-            int commonDimention1 = matrix1.GetColumnsCount();
-            int commonDimention2 = matrix2.GetRowsCount();
+            int commonDimension1 = matrix1.GetColumnsCount();
+            int commonDimension2 = matrix2.GetRowsCount();
 
-            if (commonDimention1 != commonDimention2)
+            if (commonDimension1 != commonDimension2)
             {
-                string errorString = string.Format(MatrixWarningStrings.MatricesSizesForMultiplyErrorMessage, commonDimention1, commonDimention2);
+                string errorString = string.Format(MatrixWarningStrings.MatricesSizesForMultiplyErrorMessage, commonDimension1, commonDimension2);
                 throw new Exception(GetErrorDescription(methodName, errorString));
             }
         }
