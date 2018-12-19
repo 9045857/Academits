@@ -16,7 +16,17 @@ namespace TArrayListHome
         { //TODO бросить исключение если выход за length 
             get { return items[index]; }
             //TODO бросить исключение если выход за length 
-            set { items[index] = value; }
+            set
+            {
+                if (length >= items.Length)
+                {
+                    Array.Resize(ref items, items.Length * 2);
+                }
+
+                items[index] = value;
+
+                ++length;
+            }
         }
 
         public void Add(T obj)
@@ -30,7 +40,7 @@ namespace TArrayListHome
             ++length;
         }
 
-        public void AddAt(int index, object obj)
+        public void Insert(int index, object obj)
         { // TODO проверить выход за границы  - за границы длины(последний индекс+1) (последний +1 допускается)
 
             ++length;

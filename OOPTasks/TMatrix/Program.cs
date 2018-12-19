@@ -83,18 +83,18 @@ namespace TMatrix
 
                 int index0 = 0;
                 L2Vector.Vector vector0 = new L2Vector.Vector(new double[] { 9, 9, 9 });
-                matrix5.SetRowVector(index0, vector0);
+                matrix5.SetRow(index0, vector0);
 
                 Console.WriteLine(" передаем строку-вектор {0} с индексом {1}", index0, vector0);
 
                 Console.WriteLine("Для получившейся матрицы: {0}", matrix5);
 
                 int index1 = 0;
-                Console.WriteLine("Получение {0} строки-вектора: {1}", index1, matrix5.GetRowVector(index1));
+                Console.WriteLine("Получение {0} строки-вектора: {1}", index1, matrix5.GetRow(index1));
 
                 //c.Получение вектора-столбца по индексу
                 int index2 = 0;
-                Console.WriteLine("Получение {0} столбца-вектора: {1}", index2, matrix5.GetColumnVector(index2));
+                Console.WriteLine("Получение {0} столбца-вектора: {1}", index2, matrix5.GetColumn(index2));
 
                 //a.Получение размеров матрицы
                 Console.WriteLine("Количество столбцов: {0}", matrix5.GetColumnsCount());

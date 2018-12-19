@@ -1,21 +1,114 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TArrayListHome
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            Console.WriteLine("-= 1. Построчное заполнение списка на массиве из файла =-");
+            Console.WriteLine();
+            Console.WriteLine("-------с помощью get-/set-ера-----------");
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            using (StreamReader reader = new StreamReader("poem.txt", System.Text.Encoding.Default))
+            {
+                MyListOnArray<string> textLines = new MyListOnArray<string>();
+
+                string currentTextLine;
+                int i = 0;
+                while ((currentTextLine = reader.ReadLine()) != null)
+                {
+                    textLines[i] = currentTextLine;
+                    i++;
+                }
+
+                for (int j = 0; j < i; j++)
+                {
+                    Console.WriteLine(textLines[j]);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("-----------с помощью методов Add / get--------------");
+            Console.WriteLine();
+
+            using (StreamReader reader = new StreamReader("poem.txt", System.Text.Encoding.Default))
+            {
+                MyListOnArray<string> textLines = new MyListOnArray<string>();
+
+                string currentTextLine;
+                while ((currentTextLine = reader.ReadLine()) != null)
+                {
+                    textLines.Add(currentTextLine);
+                }
+
+                for (int i = 0; i < textLines.Count; i++)
+                {
+                    Console.WriteLine(textLines[i]);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("----------- Использование стандартного списка на массиве  --------------");
+            Console.WriteLine();
+
+            using (StreamReader reader = new StreamReader("poem.txt", System.Text.Encoding.Default))
+            {
+                List<string> textLines2 = new List<string>();// TODO вопрос: данный список будет виден только в пределах фигурных скобок?
+
+                string currentTextLine;
+                while ((currentTextLine = reader.ReadLine()) != null)
+                {
+                    textLines2.Add(currentTextLine);
+                }
+
+                foreach (string line in textLines2)
+                {
+                    Console.WriteLine(line);
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("-----=== 2.  Создание списка целых чисел и удаление из него четных  ===-----");
+            Console.WriteLine();
+
+            List<int> intList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+            PrintIntList(intList);
+            Console.WriteLine();
+
+            foreach (int element in intList.ToArray())
+            {
+                if (element % 2 == 0)
+                {
+                    intList.Remove(element);
+                }
+            }
+
+            PrintIntList(intList);
+            Console.WriteLine();
+
+            Console.WriteLine();
+            Console.WriteLine("-----=== 2.  Создание списка целых чисел и удаление из него четных  ===-----");
+            Console.WriteLine();
+
+
+
+
         }
+
+        private static void PrintIntList(List<int> list)
+        {
+            foreach (int element in list)
+            {
+                Console.Write(element);
+                Console.Write("  ");
+            }
+        }
+
     }
 }

@@ -2,8 +2,11 @@
 
 namespace TArrayListHome
 {
-    public class MyList
+    public class MyList<T>
     {
        
+
+
+
     }
 }
