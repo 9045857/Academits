@@ -47,7 +47,14 @@ namespace TArrayListHome
             PrintIntList(intList);
             Console.WriteLine();
 
-            intList.RemoveAll(element => element % 2 == 0);
+            for (int i = 0; i < intList.Count; i++)
+            {
+                if (intList[i] % 2 == 0)
+                {
+                    intList.Remove(intList[i]);
+                    i--;
+                }
+            }
 
             PrintIntList(intList);
             Console.WriteLine();
