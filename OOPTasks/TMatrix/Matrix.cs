@@ -117,7 +117,7 @@ namespace TMatrix
         {
             string methodName = "Конструктор Matrix(double[][] array)";
             CheckNullOrArrays0ArraysArrayErrors(methodName, arraysArray);
-            CheckNullOr0ArraysArrayErrors(methodName, arraysArray);
+            CheckNullArraysArrayErrors(methodName, arraysArray);
 
             int rowsCount = arraysArray.Length;
             int columnsCount = GetMaxArraysArrayLength(arraysArray);
@@ -146,6 +146,12 @@ namespace TMatrix
                 }
             }
 
+            if (maxArrayLength == 0)
+            {
+                string errorString = string.Format(MatrixWarningStrings.ArraysArrayLength0ErrorMessage);
+                throw new Exception(errorString);
+            }
+
             return maxArrayLength;
         }
 
@@ -163,18 +169,13 @@ namespace TMatrix
             }
         }
 
-        private static void CheckNullOr0ArraysArrayErrors(string methodName, double[][] arraysArray)
+        private static void CheckNullArraysArrayErrors(string methodName, double[][] arraysArray)
         {
             for (int i = 0; i < arraysArray.Length; i++)
             {
                 if (arraysArray[i] == null)
                 {
                     string errorString = string.Format(MatrixWarningStrings.ArraysNullErrorMessage, i);
-                    throw new Exception(GetErrorDescription(methodName, errorString));
-                }
-                if (arraysArray[i].Length == 0)
-                {
-                    string errorString = string.Format(MatrixWarningStrings.ArraysCount0ErrorMessage, i);
                     throw new Exception(GetErrorDescription(methodName, errorString));
                 }
             }
@@ -316,7 +317,7 @@ namespace TMatrix
 
             for (int i = 0; i < columnsCount; i++)
             {
-                tmpVectorsArray[i] = new Vector(GetColumn(i));
+                tmpVectorsArray[i] = GetColumn(i);
             }
 
             rows = tmpVectorsArray;
@@ -403,7 +404,7 @@ namespace TMatrix
                 double tmpCoordinate = 0;
                 for (int j = 0; j < columnsCount; j++)
                 {
-                    tmpCoordinate += GetMatrixElement(this, i, j) * vector.GetCoordinate(j);
+                    tmpCoordinate += GetMatrixElement(i, j) * vector.GetCoordinate(j);
                 }
 
                 multiplicationResultVector.SetCoordinate(i, tmpCoordinate);
@@ -424,9 +425,9 @@ namespace TMatrix
             }
         }
 
-        private static double GetMatrixElement(Matrix matrix, int rowIndex, int columnIndex)
+        public double GetMatrixElement(int rowIndex, int columnIndex)
         {
-            return matrix.rows[rowIndex].GetCoordinate(columnIndex);
+            return rows[rowIndex].GetCoordinate(columnIndex);
         }
 
         //i.Сложение матриц

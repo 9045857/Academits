@@ -27,7 +27,9 @@
         internal const string ArraysArrayNullErrorMessage = "Ошибка: массив = null.";
         internal const string ArraysArrayCount0ErrorMessage = "Ошибка: количество массивов в массиве = 0.";
         internal const string ArraysNullErrorMessage = "Ошибка: массив {0} измерения = null.";
-        internal const string ArraysCount0ErrorMessage = "Ошибка: длина массива {0} измерения = 0.";
+
+        internal const string ArraysArrayLength0ErrorMessage = "Ошибка: длины всех измерений массива = 0.";
+
 
         internal const string VectorAndMatrixDifferentSizesWhenMultiplyErrorMessage = "Ошибка: при умножении матрица и вектор имеют соответствующие разные размеры.";
 

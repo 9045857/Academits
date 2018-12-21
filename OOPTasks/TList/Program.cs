@@ -116,7 +116,7 @@ namespace TArrayListHome
 
                 foreach (int element in intList2)
                 {
-                    if (intList3.IndexOf(element) == -1)
+                    if (!intList3.Contains(element)) 
                     {
                         intList3.Add(element);
                     }
