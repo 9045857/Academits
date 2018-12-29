@@ -14,27 +14,36 @@ namespace TArrayListHome
             Console.WriteLine();
             try
             {
-                using (StreamReader reader = new StreamReader("poem.txt", System.Text.Encoding.Default))
+                string fileName = "poem.txt";
+
+                if (File.Exists(fileName))
                 {
-                    List<string> textLines2 = new List<string>();
-
-                    string currentTextLine;
-                    while ((currentTextLine = reader.ReadLine()) != null)
+                    using (StreamReader reader = new StreamReader(fileName, System.Text.Encoding.Default))
                     {
-                        textLines2.Add(currentTextLine);
-                    }
+                        List<string> textLines2 = new List<string>();
 
-                    foreach (string line in textLines2)
-                    {
-                        Console.WriteLine(line);
-                    }
+                        string currentTextLine;
+                        while ((currentTextLine = reader.ReadLine()) != null)
+                        {
+                            textLines2.Add(currentTextLine);
+                        }
 
-                    Console.WriteLine();
+                        foreach (string line in textLines2)
+                        {
+                            Console.WriteLine(line);
+                        }
+
+                        Console.WriteLine();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ошибка: файл {0} отсутствует", fileName);
                 }
             }
-            catch (IOException)
+            catch (IOException ex)
             {
-                Console.WriteLine("Ошибка: проблемы с прочтением файла");
+                Console.WriteLine(ex.Message);
             }
 
             //2.Есть список из целых чисел. Удалить из него все четные числа. В этой задаче новый список создавать нельзя

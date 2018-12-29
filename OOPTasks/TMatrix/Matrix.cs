@@ -122,6 +122,12 @@ namespace TMatrix
             int rowsCount = arraysArray.Length;
             int columnsCount = GetMaxArraysArrayLength(arraysArray);
 
+            if (columnsCount == 0)
+            {
+                string errorString = string.Format(MatrixWarningStrings.ArraysArrayLength0ErrorMessage);
+                throw new Exception(errorString);
+            }
+
             rows = new Vector[rowsCount];
 
             for (int i = 0; i < rowsCount; i++)
@@ -144,12 +150,6 @@ namespace TMatrix
                 {
                     maxArrayLength = array.Length;
                 }
-            }
-
-            if (maxArrayLength == 0)
-            {
-                string errorString = string.Format(MatrixWarningStrings.ArraysArrayLength0ErrorMessage);
-                throw new Exception(errorString);
             }
 
             return maxArrayLength;

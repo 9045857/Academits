@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TMatrix
 {
+    /// <summary>
+    /// Done
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -147,7 +146,7 @@ namespace TMatrix
                 Console.WriteLine("Умножение матриц:");
                 matrix4.Transpose();
 
-                Console.WriteLine(" {0} * {1} = {2}", matrix3, matrix4, Matrix.GetMultiplication (matrix3, matrix4));
+                Console.WriteLine(" {0} * {1} = {2}", matrix3, matrix4, Matrix.GetMultiplication(matrix3, matrix4));
 
                 // Тестирование исключений
                 Console.WriteLine();
