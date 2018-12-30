@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TArrayListHome
+namespace MyListAnalog
 {
     internal class WarningStrings
     {

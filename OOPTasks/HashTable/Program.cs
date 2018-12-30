@@ -31,23 +31,25 @@ namespace HashTable
             Console.WriteLine();
 
             //тестируем удаление элемента
+            Console.WriteLine("удалим \"в\"");
+
             testHashTable.Remove("в");
 
-            Console.WriteLine("удалим \"в\"");
             Console.WriteLine(testHashTable);
             Console.WriteLine();
+
+            Console.WriteLine("удалим \"о\"");
 
             testHashTable.Remove("о");
 
-            Console.WriteLine("удалим \"о\"");
             Console.WriteLine(testHashTable);
             Console.WriteLine();
 
-            //тестируем очистку
+            //тестируем очистку            
+            Console.WriteLine("очистка");
 
             testHashTable.Clear();
 
-            Console.WriteLine("очистка");
             Console.WriteLine(testHashTable);
             Console.WriteLine();
         }

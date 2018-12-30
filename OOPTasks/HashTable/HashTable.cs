@@ -10,46 +10,28 @@ namespace HashTable
     public class HashTable<T> : ICollection<T>
     {
         private List<T>[] itemsList;
-        private int itemsListLength;
 
         public HashTable(int itemsListCount)
         {
-            itemsListLength = itemsListCount;
             itemsList = new List<T>[itemsListCount];
         }
 
-        public int Count//TODO что это такое? количество всех элементов в таблице или размер массива?
-        {
-            get
-            {
-                int itemsCount = 0;
-                foreach (List<T> list in itemsList)
-                {
-                    if (list!=null)
-                    {
-                        itemsCount += list.Count;
-                    }
-                }
-
-                return itemsCount;
-            }
-        }
+        public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly
         {
             get
             {
-                //TODO Не понимаю, для чего используется этот метод? 
-                throw new NotImplementedException();
+                return false;
             }
         }
 
         private int GetItemListIndex(T item)
         {
-            return Math.Abs(item.GetHashCode()) % itemsListLength;
+            return Math.Abs(item.GetHashCode() % itemsList.Length);
         }
 
-        public void Add(T item) //TODO нужно ли добавлять в хэш-таблицу элемент, если такой уже есть?
+        public void Add(T item)
         {
             int itemListIndex = GetItemListIndex(item);
 
@@ -60,36 +42,44 @@ namespace HashTable
 
             itemsList[itemListIndex].Add(item);
 
+            Count += 1;
         }
 
-        public void Clear() //TODO что должна делать Clear?
+        public void Clear()
         {
-            itemsListLength = 0;
-            itemsList = null;
+            foreach (List<T> list in itemsList)
+            {
+                if (list != null)
+                {
+                    list.Clear();
+                }
+            }
+
+            Count = 0;
         }
 
         public bool Contains(T item)
         {
             int itemListIndex = GetItemListIndex(item);
 
-            return itemsList[itemListIndex].Contains(item);
+            return itemsList[itemListIndex] == null ? false : itemsList[itemListIndex].Contains(item);
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            //TODO нужно разобраться постановкой задачи, и логикой исключений
-
-            throw new NotImplementedException();
+            Array.Copy(itemsList, array, arrayIndex);
         }
 
         public bool Remove(T item)
         {
             int itemListIndex = GetItemListIndex(item);
-            
-            if (itemsList[itemListIndex]==null)
+
+            if (itemsList[itemListIndex] == null)
             {
                 return false;
             }
+
+            Count -= 1;
 
             return itemsList[itemListIndex].Remove(item);
         }
@@ -106,20 +96,14 @@ namespace HashTable
 
         public override string ToString()
         {
-            if (itemsList==null)
-            {
-                return "null";
-            }
-
             StringBuilder hashTableStringBuilder = new StringBuilder();
-            string lineDivider = "\n";
 
             for (int i = 0; i < itemsList.Length; i++)
             {
                 hashTableStringBuilder.Append(i);
-                hashTableStringBuilder.Append(": ");                
-                            
-                if (itemsList[i] != null)
+                hashTableStringBuilder.Append(": ");
+
+                if (itemsList[i] != null && itemsList[i].Count > 0)
                 {
                     string divider = ", ";
 
@@ -132,14 +116,12 @@ namespace HashTable
                     hashTableStringBuilder.Remove(hashTableStringBuilder.Length - divider.Length, divider.Length);
                 }
 
-                hashTableStringBuilder.Append(lineDivider);
+                hashTableStringBuilder.AppendLine();
             }
-            hashTableStringBuilder.Remove(hashTableStringBuilder.Length - lineDivider.Length, lineDivider.Length);
+            int appendLineLength = 1;
+            hashTableStringBuilder.Remove(hashTableStringBuilder.Length - appendLineLength, appendLineLength);
 
             return hashTableStringBuilder.ToString();
         }
-
-        // TODO нужно ли переопределять метод Equals?
-
     }
 }

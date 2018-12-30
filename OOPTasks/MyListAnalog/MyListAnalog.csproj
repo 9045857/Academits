@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1B481441-56A0-480B-988C-F9494A4E4360}</ProjectGuid>
+    <ProjectGuid>{E0421AF4-B983-4256-AD63-B0DB239633A6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TArrayListHome</RootNamespace>
-    <AssemblyName>TArrayListHome</AssemblyName>
+    <RootNamespace>MyListAnalog</RootNamespace>
+    <AssemblyName>MyListAnalog</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyListOnArray.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WarningStrings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
