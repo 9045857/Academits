@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HashTable
 {
@@ -18,13 +16,7 @@ namespace HashTable
 
         public int Count { get; private set; }
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReadOnly => false;
 
         private int GetItemListIndex(T item)
         {
@@ -42,7 +34,7 @@ namespace HashTable
 
             itemsList[itemListIndex].Add(item);
 
-            Count += 1;
+            Count++;
         }
 
         public void Clear()
@@ -62,12 +54,36 @@ namespace HashTable
         {
             int itemListIndex = GetItemListIndex(item);
 
-            return itemsList[itemListIndex] == null ? false : itemsList[itemListIndex].Contains(item);
+            return (itemsList[itemListIndex] != null) && itemsList[itemListIndex].Contains(item);
         }
 
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
-            Array.Copy(itemsList, array, arrayIndex);
+            if (array == null)
+            {
+                throw new ArgumentNullException("Массив в который нужно копировать = null");
+            }
+
+            if (arrayIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException("Индекс массива, с которого начнется копирование из таблицы меньше 0");
+            }
+
+            if (Count + arrayIndex > array.Length)
+            {
+                throw new ArgumentException("Размер массива меньше, чем количество элементов в таблице");
+            }
+
+            int position = 0;
+            for (int i = 0; i < itemsList.Length; i++)
+            {
+                if (itemsList[i] != null)
+                {
+                    itemsList[i].CopyTo(array, position);
+
+                    position += itemsList[i].Count;
+                }
+            }
         }
 
         public bool Remove(T item)
@@ -79,25 +95,36 @@ namespace HashTable
                 return false;
             }
 
-            Count -= 1;
+            if (itemsList[itemListIndex].Remove(item))
+            {
+                Count--;
+                return true;
+            }
 
-            return itemsList[itemListIndex].Remove(item);
+            return false;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < itemsList.Length; ++i)
+            {
+                if (itemsList[i] != null)
+                {
+                    for (int j = 0; j < itemsList[i].Count; j++)
+                    {
+                        yield return itemsList[i][j];
+                    }
+                }
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public override string ToString()
         {
             StringBuilder hashTableStringBuilder = new StringBuilder();
 
+            string divider = ", ";
             for (int i = 0; i < itemsList.Length; i++)
             {
                 hashTableStringBuilder.Append(i);
@@ -105,7 +132,7 @@ namespace HashTable
 
                 if (itemsList[i] != null && itemsList[i].Count > 0)
                 {
-                    string divider = ", ";
+
 
                     foreach (T element in itemsList[i])
                     {

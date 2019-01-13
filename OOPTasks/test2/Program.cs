@@ -1,70 +1,72 @@
 using System;
-public class SamplesArray
+using System.Collections;
+
+namespace ConsoleApplication1
 {
-
-    public static void Main()
+    class Letter
     {
+        char ch = 'А';
+        int end;
 
-        // Creates and initializes a new Array of type Int32.
-        Array myIntArray = Array.CreateInstance(typeof(System.Int32), 5);
-        for (int i = myIntArray.GetLowerBound(0); i <= myIntArray.GetUpperBound(0); i++)
-            myIntArray.SetValue(i + 1, i);
+        public Letter(int end)
+        {
+            this.end = end;
+        }
 
-        // Creates and initializes a new Array of type Object.
-        Array myObjArray = Array.CreateInstance(typeof(System.Object), 5);
-        for (int i = myObjArray.GetLowerBound(0); i <= myObjArray.GetUpperBound(0); i++)
-            myObjArray.SetValue(i + 26, i);
+        // Итератор, возвращающий end-букв
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = 0; i < this.end; i++)
+            {
+                if (i == 33) yield break; // Выход из итератора, если закончится алфавит
+                yield return (char)(ch + i);
+            }
+        }
 
-        // Displays the initial values of both arrays.
-        Console.WriteLine("Int32 array:");
-        PrintValues(myIntArray);
-        Console.WriteLine("Object array:");
-        PrintValues(myObjArray);
-
-        // Copies the first element from the Int32 array to the Object array.
-        Array.Copy(myIntArray, myIntArray.GetLowerBound(0), myObjArray, myObjArray.GetLowerBound(0), 1);
-
-        // Copies the last two elements from the Object array to the Int32 array.
-        Array.Copy(myObjArray, myObjArray.GetUpperBound(0) - 1, myIntArray, myIntArray.GetUpperBound(0) - 1, 2);
-
-        // Displays the values of the modified arrays.
-        Console.WriteLine("Int32 array - Last two elements should now be the same as Object array:");
-        PrintValues(myIntArray);
-        Console.WriteLine("Object array - First element should now be the same as Int32 array:");
-        PrintValues(myObjArray);
+        // Создание именованного итератора
+        public IEnumerable MyItr(int begin, int end)
+        {
+            for (int i = begin; i <= end; i++)
+            {
+                yield return (char)(ch + i);
+            }
+        }
     }
 
-
-    public static void PrintValues(Array myArr)
+    class Program
     {
-        System.Collections.IEnumerator myEnumerator = myArr.GetEnumerator();
-        int i = 0;
-        int cols = myArr.GetLength(myArr.Rank - 1);
-        while (myEnumerator.MoveNext())
+        static void Main()
         {
-            if (i < cols)
-            {
-                i++;
-            }
-            else
-            {
-                Console.WriteLine();
-                i = 1;
-            }
-            Console.Write("\t{0}", myEnumerator.Current);
+            Console.Write("Сколько букв вывести? ");
+            int i = int.Parse(Console.ReadLine());
+
+            Letter lt = new Letter(i);
+            Console.WriteLine("\nРезультат: \n");
+
+            foreach (char c in lt)
+                Console.Write(c + " ");
+
+            Console.Write("\nВведите пределы\n\nMin: ");
+            int j = int.Parse(Console.ReadLine());
+            Console.Write("Max: ");
+            int y = int.Parse(Console.ReadLine());
+            Console.WriteLine("\nРезультат: \n");
+
+            foreach (char c in lt.MyItr(j, y))
+                Console.Write(c + " ");
+
+
+
+            Console.WriteLine();
+
+            Console.WriteLine();
+
+            char qw = 'G';
+            char iq =(char) (qw + 1);
+
+            Console.WriteLine(iq);
+
+
         }
-        Console.WriteLine();
     }
 }
-/*
-This code produces the following output.
-
-Int32 array:
-    1    2    3    4    5
-Object array:
-    26    27    28    29    30
-Int32 array - Last two elements should now be the same as Object array:
-    1    2    3    29    30
-Object array - First element should now be the same as Int32 array:
-    1    27    28    29    30
-*/

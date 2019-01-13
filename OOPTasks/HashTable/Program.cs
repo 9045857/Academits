@@ -38,11 +38,96 @@ namespace HashTable
             Console.WriteLine(testHashTable);
             Console.WriteLine();
 
-            Console.WriteLine("удалим \"о\"");
+            Console.WriteLine("удалим отсутствующий элемент \"о\"");
 
             testHashTable.Remove("о");
 
             Console.WriteLine(testHashTable);
+            Console.WriteLine();
+
+            //тестируем итератор
+            Console.WriteLine("-=тестируем итератор=-");
+
+            foreach (string element in testHashTable)
+            {
+                Console.WriteLine(element);
+            }
+
+            Console.WriteLine();
+
+            //тестируем копирование в массив
+            Console.WriteLine("-=тестируем копирование в массив=-");
+
+            string[] testArray = new string[testHashTable.Count];
+
+            testHashTable.CopyTo(testArray, 0);
+
+            foreach (string element in testArray)
+            {
+                Console.WriteLine(element);
+            }
+
+            Console.WriteLine();
+            // тестируем исключения копирования в массив
+            Console.WriteLine("-=тестируем исключения при копировании в массив=-");
+
+            try
+            {
+                testHashTable.CopyTo(testArray, -1);
+            }
+            catch (ArgumentNullException e1)
+            {
+                Console.WriteLine(e1.Message);
+            }
+            catch (ArgumentOutOfRangeException e2)
+            {
+                Console.WriteLine(e2.Message);
+            }
+            catch (ArgumentException e3)
+            {
+                Console.WriteLine(e3.Message);
+            }
+
+            Console.WriteLine();
+
+            string[] testArray1 = new string[testHashTable.Count - 1];
+            try
+            {
+                testHashTable.CopyTo(testArray1, 0);
+            }
+            catch (ArgumentNullException e1)
+            {
+                Console.WriteLine(e1.Message);
+            }
+            catch (ArgumentOutOfRangeException e2)
+            {
+                Console.WriteLine(e2.Message);
+            }
+            catch (ArgumentException e3)
+            {
+                Console.WriteLine(e3.Message);
+            }
+
+            Console.WriteLine();
+
+            string[] testArray2 = null;
+            try
+            {
+                testHashTable.CopyTo(testArray2, 0);
+            }
+            catch (ArgumentNullException e1)
+            {
+                Console.WriteLine(e1.Message);
+            }
+            catch (ArgumentOutOfRangeException e2)
+            {
+                Console.WriteLine(e2.Message);
+            }
+            catch (ArgumentException e3)
+            {
+                Console.WriteLine(e3.Message);
+            }
+
             Console.WriteLine();
 
             //тестируем очистку            
