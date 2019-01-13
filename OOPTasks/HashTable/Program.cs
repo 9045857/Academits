@@ -47,10 +47,30 @@ namespace HashTable
 
             //тестируем итератор
             Console.WriteLine("-=тестируем итератор=-");
-
-            foreach (string element in testHashTable)
+            try
             {
-                Console.WriteLine(element);
+                foreach (string element in testHashTable)
+                {
+                    Console.WriteLine(element);
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.WriteLine("-=тестируем исключение из итератора=-");
+            try
+            {
+                foreach (string element in testHashTable)
+                {
+                    Console.WriteLine(element);
+                    testHashTable.Remove(element);
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
             }
 
             Console.WriteLine();

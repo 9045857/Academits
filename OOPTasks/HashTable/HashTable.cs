@@ -9,6 +9,8 @@ namespace HashTable
     {
         private List<T>[] itemsList;
 
+        private int modCount = 0;
+
         public HashTable(int itemsListCount)
         {
             itemsList = new List<T>[itemsListCount];
@@ -35,6 +37,8 @@ namespace HashTable
             itemsList[itemListIndex].Add(item);
 
             Count++;
+
+            modCount++;
         }
 
         public void Clear()
@@ -48,6 +52,8 @@ namespace HashTable
             }
 
             Count = 0;
+
+            modCount++;
         }
 
         public bool Contains(T item)
@@ -98,6 +104,9 @@ namespace HashTable
             if (itemsList[itemListIndex].Remove(item))
             {
                 Count--;
+
+                modCount++;
+
                 return true;
             }
 
@@ -106,12 +115,19 @@ namespace HashTable
 
         public IEnumerator<T> GetEnumerator()
         {
+            int currentModCount = modCount;
+
             for (int i = 0; i < itemsList.Length; ++i)
             {
                 if (itemsList[i] != null)
                 {
                     for (int j = 0; j < itemsList[i].Count; j++)
                     {
+                        if (currentModCount != modCount)
+                        {
+                            throw new InvalidOperationException("Изменился набор таблицы во время прохода foreach");
+                        }
+
                         yield return itemsList[i][j];
                     }
                 }
