@@ -97,6 +97,18 @@ namespace MyListAnalog
             Console.WriteLine();
             Console.WriteLine();
 
+            Console.WriteLine(intList3.Capacity);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            intList3.Capacity = 3;
+            Console.WriteLine(intList3.Capacity);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            PrintIntList(intList3);
+            Console.WriteLine();
+            Console.WriteLine();
             // проверка копирования в массив
 
             int[] intArray = new int[10];

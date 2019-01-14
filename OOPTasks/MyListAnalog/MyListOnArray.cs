@@ -18,6 +18,11 @@ namespace MyListAnalog
             }
             set
             {
+                if (value < Count)
+                {
+                    value = Count;
+                }
+
                 Array.Resize(ref items, value);
             }
         }
