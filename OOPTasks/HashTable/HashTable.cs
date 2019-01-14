@@ -9,7 +9,7 @@ namespace HashTable
     {
         private List<T>[] itemsList;
 
-        private int modCount = 0;
+        private int modCount;
 
         public HashTable(int itemsListCount)
         {
@@ -22,6 +22,11 @@ namespace HashTable
 
         private int GetItemListIndex(T item)
         {
+            if (item == null)
+            {
+                return 0;
+            }
+
             return Math.Abs(item.GetHashCode() % itemsList.Length);
         }
 
@@ -148,12 +153,17 @@ namespace HashTable
 
                 if (itemsList[i] != null && itemsList[i].Count > 0)
                 {
-
-
                     foreach (T element in itemsList[i])
                     {
 
-                        hashTableStringBuilder.Append(element);
+                        if (element == null)
+                        {
+                            hashTableStringBuilder.Append("null");
+                        }
+                        else
+                        {
+                            hashTableStringBuilder.Append(element);
+                        }
                         hashTableStringBuilder.Append(divider);
                     }
                     hashTableStringBuilder.Remove(hashTableStringBuilder.Length - divider.Length, divider.Length);

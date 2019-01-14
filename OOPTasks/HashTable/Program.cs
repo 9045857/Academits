@@ -157,6 +157,23 @@ namespace HashTable
 
             Console.WriteLine(testHashTable);
             Console.WriteLine();
+
+            //тестируем на работы с null            
+            Console.WriteLine("-=тестируем на работы с null=-");
+
+            Console.WriteLine();
+
+            testHashTable.Add(null);
+            testHashTable.Add(null);
+            testHashTable.Add(null);
+
+            Console.WriteLine(testHashTable);
+            Console.WriteLine();
+
+            testHashTable.Remove(null);
+
+            Console.WriteLine(testHashTable);
+            Console.WriteLine();
         }
     }
 }
