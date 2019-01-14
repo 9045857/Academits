@@ -9,82 +9,87 @@ namespace MyListAnalog
     {
         private T[] items = new T[10];
         private int length;
+        private int modCount;
+
+        public MyListOnArray()
+        {
+            length = 0;
+        }
 
         public int Count
         {
             get { return length; }
         }
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
         public T this[int index]
         {
             get
             {
-                CheckIndexOutRange(index, 0, length);
+                string methodName = "get";
+                CheckIndexOutRange(methodName, index, 0, length - 1);
 
                 return items[index];
             }
 
             set
             {
-                CheckIndexOutRange(index, 0, length);
-
-                if (length >= items.Length)
-                {
-                    Array.Resize(ref items, items.Length * 2);
-                }
+                string methodName = "set";
+                CheckIndexOutRange(methodName, index, 0, length - 1);
 
                 items[index] = value;
 
-                ++length;
+                modCount++;
             }
         }
 
-        private void CheckIndexOutRange(int index, int lowBound, int upBound)
+        private void CheckIndexOutRange(string methodName, int index, int lowBound, int upBound)
         {
-            if (index < lowBound || index > upBound)
+            if (index < lowBound || (index > upBound))
             {
-                string errorString = string.Format(WarningStrings.IndexOutRange, index, lowBound, upBound);
+                string errorString = string.Format(WarningStrings.IndexOutRange, methodName, index, lowBound, upBound);
                 throw new Exception(errorString);
             }
         }
 
-        public void Add(T obj)
+        private void EnsureCapacity()
         {
             if (length >= items.Length)
             {
                 Array.Resize(ref items, items.Length * 2);
             }
-            items[length] = obj;
-
-            ++length;
         }
 
-        public void Insert(int index, object obj)
+        private void TrimToSize()
         {
-            CheckIndexOutRange(index, 0, length);
+            Array.Resize(ref items, length);
+        }
 
-            ++length;
+        public void Add(T item)
+        {
+            EnsureCapacity();
 
-            if (index < length - 1)
-            {
-                Array.Copy(items, index, items, index + 1, length - index);
-            }
+            items[length] = item;
 
-            items[index] = (T)obj;
+            length++;
+
+            modCount++;
         }
 
         public void RemoveAt(int index)
         {
-            CheckIndexOutRange(index, 0, length);
+            string methodName = "RemoveAt(int index)";
+            CheckIndexOutRange(methodName, index, 0, length - 1);
 
             if (index < length - 1)
             {
                 Array.Copy(items, index + 1, items, index, length - index - 1);
             }
 
-            --length;
+            length--;
+
+            modCount++;
         }
 
         public int IndexOf(T item)
@@ -102,27 +107,23 @@ namespace MyListAnalog
 
         public void Insert(int index, T item)
         {
-            //TODO исключение для индекса в рамках списка
-            //TODO исключение для нессылочных типов значение item = null
-            //TODO тип вставляемого объекта должен быть такой же как у массива
-
-            //            Исключения
-            //ArgumentOutOfRangeException
-            //Значение параметра index меньше 0.
-
-            //- или - Значение index больше значения Count.
+            string methodName = "Insert(int index, T item)";
+            CheckIndexOutRange(methodName, index, 0, length - 1);
 
             items[index] = item;
+
+            modCount++;
         }
 
         public void Clear()
         {
             length = 0;
+
+            modCount++;
         }
 
         public bool Contains(T item)
         {
-            //TODO исключение что бы тип итем был типом массива ?
             for (int i = 0; i < length; i++)
             {
                 if (item.Equals(items[i]))
@@ -134,78 +135,37 @@ namespace MyListAnalog
             return false;
         }
 
+        private bool IsArrayLengthEnoughToCopy(int arrayLength, int beginIndex)
+        {
+            int indexNumberingShift = 1;
+            return length <= (arrayLength - (beginIndex + indexNumberingShift));
+        }
+
         public void CopyTo(T[] array, int arrayIndex)
         {
-            // Исключения           ArgumentNullException
-            //Свойство array имеет значение null.
-            //ArgumentOutOfRangeException
-            //Значение параметра arrayIndex меньше 0.
-            //ArgumentException
-            //Число элементов в исходной коллекции List<T> больше доступного места от положения, заданного значением параметра arrayIndex, до конца массива назначения array.
+            string methodName = "CopyTo(T[] array, int arrayIndex)";
+            CheckIndexOutRange(methodName, arrayIndex, 0, array.Length - 1);
 
-            Array.Copy(items, array, arrayIndex);
+            if (!IsArrayLengthEnoughToCopy(array.Length, arrayIndex))
+            {
+                string errorString = string.Format(WarningStrings.ArrayLengthNotEnoughToCopy, methodName, length, arrayIndex, array.Length);
+                throw new Exception(errorString);
+            }
 
-            //            Комментарии
-            //Этот метод использует Array.Copy копируются элементы.
-
-            //Элементы копируются Array в том же порядке, в котором перечислитель перемещается по List<T>.
-
-            //Этот метод является операцией O (n) операции, где n является Count.
-        }
-
-        public void CopyTo(int index, T[] array, int arrayIndex, int count)
-        {
-            //            Исключения
-            //ArgumentNullException
-            //Свойство array имеет значение null.
-            //ArgumentOutOfRangeException
-            //Значение параметра index меньше 0.
-
-            //- или - Значение параметра arrayIndex меньше 0.
-
-
-            //  - или - Значение параметра count меньше 0.
-            //ArgumentException
-            //Значение параметра index больше или равно значению Count исходного списка List<T>.
-
-            //-или - Число элементов от index до конца исходного списка List<T> больше доступного места от положения, заданного значением параметра arrayIndex, до конца массива назначения array.
-            Array.Copy(items, index, array, arrayIndex, count);
-
-            //            Комментарии
-            //Этот метод использует Array.Copy копируются элементы.
-
-            //Элементы копируются Array в том же порядке, в котором перечислитель перемещается по List<T>.
-
-            //Этот метод является операцией O (n) операции, где n является Count.
-        }
-
-        public void CopyTo(T[] array)
-        {
-
-            //            Параметры
-            //array
-            //T[]
-            //Одномерный массив Array, в который копируются элементы из интерфейса List<T>. Массив Array должен иметь индексацию, начинающуюся с нуля.
-            //Исключения
-            //ArgumentNullException
-            //Свойство array имеет значение null.
-            //ArgumentException
-            //Число элементов в исходном массиве List<T> больше числа элементов, которые может содержать массив назначения array.
-
-            items.CopyTo(array, length);
+            Array.Copy(items, 0, array, arrayIndex, length);
         }
 
         public bool Remove(T item)
         {
-            //TODO какое исключение?
-
             for (int i = 0; i < length; i++)
             {
                 if (items[i].Equals(item))
                 {
                     Array.Copy(items, i + 1, items, i, length - i - 1);
-                    
-                    --length;
+
+                    length--;
+
+                    modCount++;
                 }
             }
 
@@ -214,12 +174,20 @@ namespace MyListAnalog
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            int currentModCount = modCount;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (currentModCount != modCount)
+                {
+                    string errorString = string.Format(WarningStrings.ChangeListError);
+                    throw new Exception(errorString);
+                }
+
+                yield return items[i];
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
