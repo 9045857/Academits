@@ -85,15 +85,11 @@ namespace HashTable
                 throw new ArgumentException("Размер массива меньше, чем количество элементов в таблице");
             }
 
-            int position = 0;
-            for (int i = 0; i < itemsList.Length; i++)
+            int i = arrayIndex;
+            foreach (T element in this)
             {
-                if (itemsList[i] != null)
-                {
-                    itemsList[i].CopyTo(array, position);
-
-                    position += itemsList[i].Count;
-                }
+                array[i] = element;
+                i++;
             }
         }
 
@@ -122,18 +118,18 @@ namespace HashTable
         {
             int currentModCount = modCount;
 
-            for (int i = 0; i < itemsList.Length; ++i)
+            foreach (List<T> list in itemsList)
             {
-                if (itemsList[i] != null)
+                if (list != null)
                 {
-                    for (int j = 0; j < itemsList[i].Count; j++)
+                    foreach (T element in list)
                     {
                         if (currentModCount != modCount)
                         {
                             throw new InvalidOperationException("Изменился набор таблицы во время прохода foreach");
                         }
 
-                        yield return itemsList[i][j];
+                        yield return element;
                     }
                 }
             }
