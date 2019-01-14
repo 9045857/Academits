@@ -7,18 +7,35 @@ namespace MyListAnalog
 {
     class MyListOnArray<T> : IList<T>
     {
-        private T[] items = new T[10];
-        private int length;
+        private T[] items;
         private int modCount;
+
+        public int Capacity
+        {
+            get
+            {
+                return items.Length;
+            }
+            set
+            {
+                Array.Resize(ref items, value);
+            }
+        }
+
+        public int Count { get; private set; }
 
         public MyListOnArray()
         {
-            length = 0;
+            Count = 0;
+
+            int defaultCapacity = 10;
+            items = new T[defaultCapacity];
         }
 
-        public int Count
+        public MyListOnArray(int beginCapacity)
         {
-            get { return length; }
+            Count = 0;
+            items = new T[beginCapacity];
         }
 
         public bool IsReadOnly => false;
@@ -28,7 +45,7 @@ namespace MyListAnalog
             get
             {
                 string methodName = "get";
-                CheckIndexOutRange(methodName, index, 0, length - 1);
+                CheckIndexOutRange(methodName, index, 0, Count - 1);
 
                 return items[index];
             }
@@ -36,7 +53,7 @@ namespace MyListAnalog
             set
             {
                 string methodName = "set";
-                CheckIndexOutRange(methodName, index, 0, length - 1);
+                CheckIndexOutRange(methodName, index, 0, Count - 1);
 
                 items[index] = value;
 
@@ -49,30 +66,30 @@ namespace MyListAnalog
             if (index < lowBound || (index > upBound))
             {
                 string errorString = string.Format(WarningStrings.IndexOutRange, methodName, index, lowBound, upBound);
-                throw new Exception(errorString);
+                throw new IndexOutOfRangeException(errorString);
             }
         }
 
-        private void EnsureCapacity()
+        private void IncreaseCapacityIfNeed()
         {
-            if (length >= items.Length)
+            if (Count >= items.Length)
             {
                 Array.Resize(ref items, items.Length * 2);
             }
         }
 
-        private void TrimToSize()
+        public void TrimExcess()
         {
-            Array.Resize(ref items, length);
+            Array.Resize(ref items, Count);
         }
 
         public void Add(T item)
         {
-            EnsureCapacity();
+            IncreaseCapacityIfNeed();
 
-            items[length] = item;
+            items[Count] = item;
 
-            length++;
+            Count++;
 
             modCount++;
         }
@@ -80,35 +97,34 @@ namespace MyListAnalog
         public void RemoveAt(int index)
         {
             string methodName = "RemoveAt(int index)";
-            CheckIndexOutRange(methodName, index, 0, length - 1);
+            CheckIndexOutRange(methodName, index, 0, Count - 1);
 
-            if (index < length - 1)
+            if (index < Count - 1)
             {
-                Array.Copy(items, index + 1, items, index, length - index - 1);
+                Array.Copy(items, index + 1, items, index, Count - index - 1);
             }
 
-            length--;
+            Count--;
 
             modCount++;
         }
 
         public int IndexOf(T item)
         {
-            for (int i = 0; i < length; i++)
-            {
-                if (item.Equals(items[i]))
-                {
-                    return i;
-                }
-            }
-
-            return -1;
+            return Array.IndexOf(items, item);
         }
 
         public void Insert(int index, T item)
         {
             string methodName = "Insert(int index, T item)";
-            CheckIndexOutRange(methodName, index, 0, length - 1);
+            CheckIndexOutRange(methodName, index, 0, Count);
+
+            if (index == Count)
+            {
+                IncreaseCapacityIfNeed();
+
+                Count++;
+            }
 
             items[index] = item;
 
@@ -117,28 +133,25 @@ namespace MyListAnalog
 
         public void Clear()
         {
-            length = 0;
+            Count = 0;
 
             modCount++;
         }
 
         public bool Contains(T item)
         {
-            for (int i = 0; i < length; i++)
+            if (Array.IndexOf(items, item) == -1)
             {
-                if (item.Equals(items[i]))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         private bool IsArrayLengthEnoughToCopy(int arrayLength, int beginIndex)
         {
             int indexNumberingShift = 1;
-            return length <= (arrayLength - (beginIndex + indexNumberingShift));
+            return Count <= (arrayLength - (beginIndex + indexNumberingShift));
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -148,40 +161,41 @@ namespace MyListAnalog
 
             if (!IsArrayLengthEnoughToCopy(array.Length, arrayIndex))
             {
-                string errorString = string.Format(WarningStrings.ArrayLengthNotEnoughToCopy, methodName, length, arrayIndex, array.Length);
+                string errorString = string.Format(WarningStrings.ArrayLengthNotEnoughToCopy, methodName, Count, arrayIndex, array.Length);
                 throw new Exception(errorString);
             }
 
-            Array.Copy(items, 0, array, arrayIndex, length);
+            Array.Copy(items, 0, array, arrayIndex, Count);
         }
 
         public bool Remove(T item)
         {
-            for (int i = 0; i < length; i++)
+            int itemIndex = IndexOf(item);
+
+            if (itemIndex == -1)
             {
-                if (items[i].Equals(item))
-                {
-                    Array.Copy(items, i + 1, items, i, length - i - 1);
-
-                    length--;
-
-                    modCount++;
-                }
+                return false;
             }
 
-            return false;
+            Array.Copy(items, itemIndex + 1, items, itemIndex, Count - itemIndex - 1);
+
+            Count--;
+
+            modCount++;
+
+            return true;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
             int currentModCount = modCount;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (currentModCount != modCount)
                 {
                     string errorString = string.Format(WarningStrings.ChangeListError);
-                    throw new Exception(errorString);
+                    throw new InvalidOperationException(errorString);
                 }
 
                 yield return items[i];

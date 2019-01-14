@@ -7,6 +7,7 @@ namespace MyListAnalog
     {
         static void Main(string[] args)
         {
+
             //1.Прочитать в список все строки из файла
             Console.WriteLine();
             Console.WriteLine("----------- Использование стандартного списка на массиве  --------------");
@@ -102,7 +103,7 @@ namespace MyListAnalog
 
             try
             {
-                intList3.CopyTo(intArray,2);// изменяя индекс начала можно проверить на работу исключений
+                intList3.CopyTo(intArray, 2);// изменяя индекс начала можно проверить на работу исключений
 
                 // изменяя индекс начала можно проверить на работу исключений:
                 //intList3.CopyTo(intArray, -1);
@@ -135,7 +136,11 @@ namespace MyListAnalog
 
                 Console.WriteLine();
             }
-            catch (Exception e)
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (InvalidOperationException e)
             {
                 Console.WriteLine(e.Message);
             }
