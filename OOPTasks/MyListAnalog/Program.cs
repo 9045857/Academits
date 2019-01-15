@@ -7,11 +7,13 @@ namespace MyListAnalog
     {
         static void Main(string[] args)
         {
-
             //1.Прочитать в список все строки из файла
             Console.WriteLine();
             Console.WriteLine("----------- Использование стандартного списка на массиве  --------------");
             Console.WriteLine();
+
+            MyListOnArray<string> textLines2 = new MyListOnArray<string>();
+
             try
             {
                 string fileName = "poem.txt";
@@ -20,8 +22,6 @@ namespace MyListAnalog
                 {
                     using (StreamReader reader = new StreamReader(fileName, System.Text.Encoding.Default))
                     {
-                        MyListOnArray<string> textLines2 = new MyListOnArray<string>();
-
                         string currentTextLine;
                         while ((currentTextLine = reader.ReadLine()) != null)
                         {
@@ -97,18 +97,41 @@ namespace MyListAnalog
             Console.WriteLine();
             Console.WriteLine();
 
-            Console.WriteLine(intList3.Capacity);
-            Console.WriteLine();
+            //тестирование Insert, IndexOf, Remove на примере с null
+
+            Console.WriteLine("тестирование Insert, IndexOf, Remove на примере с null");
+
+            Console.WriteLine("Count: {0}", textLines2.Count);
+
             Console.WriteLine();
 
-            intList3.Capacity = 3;
-            Console.WriteLine(intList3.Capacity);
-            Console.WriteLine();
+            Console.WriteLine("Insert(3,null)");
+            textLines2.Insert(3, null);
+
+            Console.WriteLine("Count: {0}", textLines2.Count);
+
+            Console.WriteLine("IndexOf(null): {0}", textLines2.IndexOf(null));
+
             Console.WriteLine();
 
-            PrintIntList(intList3);
+            Console.WriteLine("Remove(null)");
+            textLines2.Remove(null);
+
+            Console.WriteLine("Count: {0}", textLines2.Count);
+
             Console.WriteLine();
+
+            Console.WriteLine("RemoveAt(5)");
+            textLines2.RemoveAt(5);
+
             Console.WriteLine();
+            foreach (string line in textLines2)
+            {
+                Console.WriteLine(line);
+            }
+
+            Console.WriteLine();
+
             // проверка копирования в массив
 
             int[] intArray = new int[10];

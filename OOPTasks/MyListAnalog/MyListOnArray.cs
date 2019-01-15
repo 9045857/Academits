@@ -20,7 +20,9 @@ namespace MyListAnalog
             {
                 if (value < Count)
                 {
-                    value = Count;
+                    string methodName = "Capacity set";
+                    string errorString = string.Format(WarningStrings.SetOutRange, methodName, value, Count);
+                    throw new ArgumentOutOfRangeException(errorString);
                 }
 
                 Array.Resize(ref items, value);
@@ -85,7 +87,12 @@ namespace MyListAnalog
 
         public void TrimExcess()
         {
-            Array.Resize(ref items, Count);
+            double allowedDeltaBetweenCountAndCapacity = 0.1;
+
+            if (((double)Capacity / Count - 1) < allowedDeltaBetweenCountAndCapacity)
+            {
+                Array.Resize(ref items, Count);
+            }
         }
 
         public void Add(T item)
@@ -116,7 +123,19 @@ namespace MyListAnalog
 
         public int IndexOf(T item)
         {
-            return Array.IndexOf(items, item);
+            for (int i = 0; i < Count; i++)
+            {
+                if (item == null && items[i] == null)// нужно с налами разобраться
+                {
+                    return i;
+                }
+                else if (item != null && items[i] != null && item.Equals(items[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         public void Insert(int index, T item)
@@ -124,11 +143,13 @@ namespace MyListAnalog
             string methodName = "Insert(int index, T item)";
             CheckIndexOutRange(methodName, index, 0, Count);
 
-            if (index == Count)
-            {
-                IncreaseCapacityIfNeed();
+            Count++;
 
-                Count++;
+            IncreaseCapacityIfNeed();
+
+            for (int i = 1; i < (Count - index); i++)
+            {
+                items[Count - i] = items[Count - 1 - i];
             }
 
             items[index] = item;
@@ -145,7 +166,7 @@ namespace MyListAnalog
 
         public bool Contains(T item)
         {
-            if (Array.IndexOf(items, item) == -1)
+            if (IndexOf(item) == -1)
             {
                 return false;
             }
