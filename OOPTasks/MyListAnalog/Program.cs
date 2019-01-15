@@ -28,10 +28,7 @@ namespace MyListAnalog
                             textLines2.Add(currentTextLine);
                         }
 
-                        foreach (string line in textLines2)
-                        {
-                            Console.WriteLine(line);
-                        }
+                        PrintStringMyList(textLines2);
 
                         Console.WriteLine();
                     }
@@ -105,8 +102,8 @@ namespace MyListAnalog
 
             Console.WriteLine();
 
-            Console.WriteLine("Insert(3,null)");
-            textLines2.Insert(3, null);
+            Console.WriteLine("Insert(10,null)");
+            textLines2.Insert(10, null);
 
             Console.WriteLine("Count: {0}", textLines2.Count);
 
@@ -125,10 +122,7 @@ namespace MyListAnalog
             textLines2.RemoveAt(5);
 
             Console.WriteLine();
-            foreach (string line in textLines2)
-            {
-                Console.WriteLine(line);
-            }
+            PrintStringMyList(textLines2);
 
             Console.WriteLine();
 
@@ -178,6 +172,14 @@ namespace MyListAnalog
             catch (InvalidOperationException e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private static void PrintStringMyList(MyListOnArray<string> textLines2)
+        {
+            foreach (string line in textLines2)
+            {
+                Console.WriteLine(line);
             }
         }
 

@@ -125,11 +125,7 @@ namespace MyListAnalog
         {
             for (int i = 0; i < Count; i++)
             {
-                if (item == null && items[i] == null)// нужно с налами разобраться
-                {
-                    return i;
-                }
-                else if (item != null && items[i] != null && item.Equals(items[i]))
+                if (Equals(item, items[i]))
                 {
                     return i;
                 }
@@ -143,16 +139,14 @@ namespace MyListAnalog
             string methodName = "Insert(int index, T item)";
             CheckIndexOutRange(methodName, index, 0, Count);
 
-            Count++;
-
             IncreaseCapacityIfNeed();
 
-            for (int i = 1; i < (Count - index); i++)
-            {
-                items[Count - i] = items[Count - 1 - i];
-            }
+            int arrayCopyPartLength = Count - index;
+            Array.Copy(items, index, items, index + 1, arrayCopyPartLength);
 
             items[index] = item;
+
+            Count++;
 
             modCount++;
         }
@@ -166,12 +160,7 @@ namespace MyListAnalog
 
         public bool Contains(T item)
         {
-            if (IndexOf(item) == -1)
-            {
-                return false;
-            }
-
-            return true;
+            return IndexOf(item) != -1;
         }
 
         private bool IsArrayLengthEnoughToCopy(int arrayLength, int beginIndex)
