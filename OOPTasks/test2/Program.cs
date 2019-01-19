@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 
-namespace ConsoleApplication1
+
+namespace test2
 {
     class Letter
     {
@@ -77,14 +78,48 @@ namespace ConsoleApplication1
             Console.WriteLine();
             PrintArray(starray2);
 
-            starray1[1]="kkkk";
+            starray1[1] = "kkkk";
 
             Console.WriteLine();
 
             PrintArray(starray1);
             Console.WriteLine();
             PrintArray(starray2);
+            Console.WriteLine();
 
+
+            // посмотрим, как ведет себя копирование массива generic-ов
+
+            Person[] people1 = new Person[3];
+
+            people1[0] = new Person { Age = 10, Sex = true, Name = "A" };
+            people1[1] = new Person { Age = 20, Sex = false, Name = "B" };
+            people1[2] = new Person { Age = 30, Sex = true, Name = "C" };
+
+            Person[] people2 = new Person[3];
+
+            Array.Copy(people1, people2,people1.Length);
+
+            PrintPeople(people1);
+
+            Console.WriteLine();
+
+            PrintPeople(people2);
+
+            Console.WriteLine("меняем возраст человека с индексом 1 в первом массиве. смотрим, что произошло во втором");
+
+            people1[1].Age = 110;
+
+            PrintPeople(people2);
+
+        }
+
+        private static void PrintPeople(Person[] items)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                Console.WriteLine("{0}: {1}, {2}, {3}", i, items[i].Age,items[i].Name,items[i].Sex);
+            }
         }
 
         private static void PrintArray(string[] starray1)
