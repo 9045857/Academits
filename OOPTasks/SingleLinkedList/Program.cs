@@ -10,9 +10,9 @@ namespace SingleLinkedList
     {
         internal static void PrintList(SingleLinkedList<int> list)
         {
-            for (int i = 0; i < list.Count; i++)
+            foreach (var item in list)
             {
-                Console.WriteLine(list[i]);
+                Console.WriteLine(item);
             }
         }
 
@@ -22,7 +22,7 @@ namespace SingleLinkedList
 
             for (int i = 0; i < 5; i++)
             {
-                list.AddFirst(i*12);
+                list.AddFirst(i * 12);
             }
 
             PrintList(list);
@@ -32,7 +32,7 @@ namespace SingleLinkedList
             Console.WriteLine();
             PrintList(list);
 
-            list.InsertTo(3,500);
+            list.InsertTo(3, 500);
 
             Console.WriteLine();
             PrintList(list);
@@ -40,7 +40,7 @@ namespace SingleLinkedList
             list.InsertTo(0, 5000);
 
             Console.WriteLine();
-            Console.WriteLine("Количество: "+list.Count);
+            Console.WriteLine("Количество: " + list.Count);
             PrintList(list);
 
             Console.WriteLine();
@@ -49,6 +49,42 @@ namespace SingleLinkedList
             Console.WriteLine("Количество: " + list.Count);
             PrintList(list);
 
+            Console.WriteLine();
+            Console.WriteLine("разворот списка");
+
+            list.Reverse();
+            PrintList(list);
+
+            Console.WriteLine();
+            Console.WriteLine("копирование списка");
+
+            SingleLinkedList<int> listForCopy = new SingleLinkedList<int>();
+
+            SingleLinkedList<int>.Copy(list, listForCopy);
+
+            PrintList(listForCopy);
+
+
+            //• Тестирование Изменение значения по индексу пусть выдает старое значение.
+            Console.WriteLine();
+
+            int indexForReplace = 3;
+            int newValue = 333;
+
+            Console.WriteLine("заменим {0} - {1} элемент списка на {2}", listForCopy.Replace(indexForReplace, newValue), indexForReplace, newValue);
+
+            PrintList(listForCopy);
+
+            //•	Тестирование удаление элемента по индексу, пусть выдает значение элемента
+            Console.WriteLine();
+
+            int indexForRemove = 3;
+
+            Console.WriteLine("удалим {0} - {1} элемент списка", listForCopy.RemoveAt(indexForRemove), indexForRemove);
+
+            PrintList(listForCopy);
+
+            Console.WriteLine("Количество {0}", listForCopy.Count);
 
         }
     }

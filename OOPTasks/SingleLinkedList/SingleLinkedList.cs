@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SingleLinkedList
 {
-    public class SingleLinkedList<T>
+    public class SingleLinkedList<T> : IEnumerable
     {
         private int modCount;
 
@@ -47,35 +45,37 @@ namespace SingleLinkedList
         {
             get
             {
-                // исключение на индекс
-
-                //  string methodName = "get";
+                string methodName = "get[int index]";
+                CheckIndexInRange(methodName, index, 0, Count - 1);
 
                 return GetListItem(index).Data;
             }
 
             set
             {
-                string methodName = "set";
+                string methodName = "set[int index]";
+                CheckIndexInRange(methodName, index, 0, Count);
 
-                //CheckIndexOutRange(methodName, index, 0, Count - 1); // исключение на индекс
-
-                GetListItem(index).Data = value;//Нужно проверить, что бы ссылочный тип работал правильно
-
-                //items[index] = value;
+                GetListItem(index).Data = value;
 
                 modCount++;
+            }
+        }
+
+        private void CheckIndexInRange(string methodName, int index, int lowBound, int upBound)
+        {
+            if (index < lowBound || index > upBound)
+            {
+                string errorMessage = string.Format(WarningStrings.IndexOutRange, methodName, index);
+                throw new IndexOutOfRangeException(errorMessage);
             }
         }
 
         //•	вставка элемента по индексу
         public void InsertTo(int index, T item)
         {
-            if (index > Count)
-            {
-                string methodName = "InsertTo(int index, T item)";
-                throw new Exception();
-            }
+            string methodName = "InsertTo(int index, T item)";
+            CheckIndexInRange(methodName, index, 0, Count);
 
             if (index == 0)
             {
@@ -99,18 +99,83 @@ namespace SingleLinkedList
         }
 
         //• Изменение значения по индексу пусть выдает старое значение.
+        public T Replace(int index, T newData)
+        {
+            string methodName = "Replace(int index, T newData)";
+            CheckIndexInRange(methodName, index, 0, Count - 1);
 
+            ListItem<T> currentItem = Head;
 
+            for (int i = 0; i < index; i++)
+            {
+                currentItem = currentItem.Next;
+            }
 
+            T resultData = currentItem.Data;
+
+            currentItem.Data = newData;
+
+            modCount++;
+
+            return resultData;
+        }
 
         //•	удаление элемента по индексу, пусть выдает значение элемента
+        public T RemoveAt(int index)
+        {
+            string methodName = "RemoveAt(int index)";
+            CheckIndexInRange(methodName, index, 0, Count - 1);
 
+            ListItem<T> currentItem = Head;
 
+            T resultItem;
 
+            if (index == 0)
+            {
+                resultItem = Head.Data;
 
+                Head = currentItem.Next;
 
+                Count--;
 
+                modCount++;
 
+                return resultItem;
+            }
+
+            if (index == Count)
+            {
+                for (int i = 1; i < Count - 1; i++)
+                {
+                    currentItem = currentItem.Next;
+                }
+
+                resultItem = currentItem.Next.Data;
+
+                currentItem.Next = null;
+
+                Count--;
+
+                modCount++;
+
+                return resultItem;
+            }
+
+            for (int i = 1; i < index; i++)
+            {
+                currentItem = currentItem.Next;
+            }
+
+            resultItem = currentItem.Next.Data;
+
+            currentItem.Next = currentItem.Next.Next;
+
+            Count--;
+
+            modCount++;
+
+            return resultItem;
+        }
 
         //•	удаление узла по значению, пусть выдает true, если элемент был удален
         public bool Remove(T item)
@@ -167,49 +232,67 @@ namespace SingleLinkedList
         }
 
         //•	разворот списка за линейное время
+        public void Reverse()
+        {
+            ListItem<T> currentItem = Head;
+            ListItem<T> previewItem = null;
+            ListItem<T> nextItem;
 
+            while (currentItem.Next != null)
+            {
+                nextItem = currentItem.Next;
+                currentItem.Next = previewItem;
+                previewItem = currentItem;
+                currentItem = nextItem;
+            }
 
+            currentItem.Next = previewItem;
+            Head = currentItem;
 
+            modCount++;
+        }
 
         //•	копирование списка
         public static void Copy(SingleLinkedList<T> sourceList, SingleLinkedList<T> destinationList)
         {
-            int sourceListCount = sourceList.Count;
-            int destinationListCount = destinationList.Count;
+            ListItem<T> currentSourceItem = sourceList.Head;
+            ListItem<T> currentDestinationItem = new ListItem<T>(sourceList.Head.Data);
 
-            destinationList.Head.Data = sourceList.Head.Data;// не понятно, если data ссылочный тип. Как делать присвоение?
+            destinationList.Head = currentDestinationItem;
+            destinationList.Count = sourceList.Count;
 
-            ListItem<T> currentSourceItem = new ListItem<T>(sourceList.Head.Data);
-               
-            
-
-             //   sourceList.Head;
-
-
-            ListItem<T> currentDestinationItem = destinationList.Head;
-            
-            if (sourceListCount <= destinationListCount)
+            while (currentSourceItem.Next != null)
             {
-                for (int i = 1; i < sourceList.Count; i++)
+                currentDestinationItem.Next = new ListItem<T>(currentSourceItem.Next.Data);
+                currentSourceItem = currentSourceItem.Next;
+                currentDestinationItem = currentDestinationItem.Next;
+            }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            int currentModCount = modCount;
+
+            ListItem<T> currentItem = Head;
+
+            yield return currentItem.Data;
+
+            for (int i = 1; i < Count; i++)
+            {
+                if (currentModCount != modCount)
                 {
-                    currentDestinationItem.Data = currentSourceItem.Data;
+                    throw new InvalidOperationException(WarningStrings.ChangeCountInForeach);
                 }
 
-                
+                currentItem = currentItem.Next;
+
+                yield return currentItem.Data;
             }
-            else
-            {
+        }
 
-
-            }
-
-            destinationList.Count = sourceList.Count;
-            destinationList.Head = sourceList.Head;
-
-          
-            
-
-
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

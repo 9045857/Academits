@@ -11,6 +11,7 @@ namespace SingleLinkedList
         public ListItem(T data)
         {
             Data = data;
+            Next = null;
         }
 
         public ListItem(T data, ListItem<T> next)
