@@ -165,8 +165,10 @@ namespace SingleLinkedList
         //•	удаление узла по значению, пусть выдает true, если элемент был удален
         public bool Remove(T item)
         {
-            string methodName = "Remove(T item)";
-            CheckOnEmptyList(methodName, this);
+            if (Count == 0 || Head == null)
+            {
+                return false;
+            }
 
             if (Equals(Head.Data, item))
             {
@@ -225,13 +227,17 @@ namespace SingleLinkedList
         //•	разворот списка за линейное время
         public void Reverse()
         {
+            if (Equals(Head, null))
+            {
+                return;
+            }
+
             ListItem<T> currentItem = Head;
             ListItem<T> previewItem = null;
-            ListItem<T> nextItem;
 
             while (currentItem.Next != null)
             {
-                nextItem = currentItem.Next;
+                ListItem<T> nextItem = currentItem.Next;
                 currentItem.Next = previewItem;
                 previewItem = currentItem;
                 currentItem = nextItem;
@@ -246,8 +252,13 @@ namespace SingleLinkedList
         //•	копирование списка
         public static void Copy(SingleLinkedList<T> sourceList, SingleLinkedList<T> destinationList)
         {
-            string methodName = "Copy(sourceList, destinationList)";
-            CheckOnEmptyList(methodName, sourceList);
+            if (sourceList.Count == 0 || Equals(sourceList.Head, null))
+            {
+                destinationList.Count = 0;
+                destinationList.Head = null;
+
+                return;
+            }
 
             ListItem<T> currentSourceItem = sourceList.Head;
             ListItem<T> currentDestinationItem = new ListItem<T>(sourceList.Head.Data);
@@ -266,23 +277,14 @@ namespace SingleLinkedList
         //7. Итератор упадет на пустом списке
         public IEnumerator<T> GetEnumerator()
         {
-            string methodName = "GetEnumerator()";
-            CheckOnEmptyList(methodName, this);
-
             int currentModCount = modCount;
 
-            ListItem<T> currentItem = Head;
-
-            yield return currentItem.Data;
-
-            for (int i = 1; i < Count; i++)
+            for (ListItem<T> currentItem = Head; currentItem != null; currentItem = currentItem.Next)
             {
                 if (currentModCount != modCount)
                 {
                     throw new InvalidOperationException(WarningStrings.ChangeCountInForeach);
                 }
-
-                currentItem = currentItem.Next;
 
                 yield return currentItem.Data;
             }
