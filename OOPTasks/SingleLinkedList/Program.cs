@@ -27,15 +27,20 @@ namespace SingleLinkedList
 
             PrintList(list);
 
+            Console.WriteLine();
+            Console.WriteLine("Тесты вставки по индексу list[3] = 100;");
+
             list[3] = 100;
+            PrintList(list);
 
             Console.WriteLine();
-            PrintList(list);
+            Console.WriteLine("Тесты InsertTo(3, 500); ");
 
             list.InsertTo(3, 500);
+            PrintList(list);
 
             Console.WriteLine();
-            PrintList(list);
+            Console.WriteLine("Тесты InsertTo(0, 5000);");
 
             list.InsertTo(0, 5000);
 
@@ -44,6 +49,8 @@ namespace SingleLinkedList
             PrintList(list);
 
             Console.WriteLine();
+            Console.WriteLine("Тесты list.Remove(5000) и list.Remove(500) ");
+
             list.Remove(5000);
             list.Remove(500);
             Console.WriteLine("Количество: " + list.Count);

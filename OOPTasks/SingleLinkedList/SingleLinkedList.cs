@@ -22,7 +22,6 @@ namespace SingleLinkedList
             ListItem<T> addedItem = new ListItem<T>(item, Head);
 
             Head = addedItem;
-
             Count++;
 
             modCount++;
@@ -54,7 +53,7 @@ namespace SingleLinkedList
             set
             {
                 string methodName = "set[int index]";
-                CheckIndexInRange(methodName, index, 0, Count);
+                CheckIndexInRange(methodName, index, 0, Count - 1);
 
                 GetListItem(index).Data = value;
 
@@ -72,24 +71,26 @@ namespace SingleLinkedList
         }
 
         //•	вставка элемента по индексу
-        public void InsertTo(int index, T item)
+        public void InsertTo(int index, T data)
         {
-            string methodName = "InsertTo(int index, T item)";
+            string methodName = "InsertTo(int index, T data)";
             CheckIndexInRange(methodName, index, 0, Count);
 
             if (index == 0)
             {
-                ListItem<T> insertedItem = new ListItem<T>(item, Head);
+                ListItem<T> insertedItem = new ListItem<T>(data, Head);
                 Head = insertedItem;
             }
             else if (index < Count)
             {
-                ListItem<T> insertedItem = new ListItem<T>(item, GetListItem(index));
-                GetListItem(index - 1).Next = insertedItem;
+                ListItem<T> previewInsertedListItem = GetListItem(index - 1);
+                ListItem<T> nextInsertedListItem = previewInsertedListItem.Next;
+
+                previewInsertedListItem.Next = new ListItem<T>(data, nextInsertedListItem);
             }
             else
             {
-                ListItem<T> insertedItem = new ListItem<T>(item);
+                ListItem<T> insertedItem = new ListItem<T>(data);
                 GetListItem(index - 1).Next = insertedItem;
             }
 
@@ -104,15 +105,9 @@ namespace SingleLinkedList
             string methodName = "Replace(int index, T newData)";
             CheckIndexInRange(methodName, index, 0, Count - 1);
 
-            ListItem<T> currentItem = Head;
-
-            for (int i = 0; i < index; i++)
-            {
-                currentItem = currentItem.Next;
-            }
+            ListItem<T> currentItem = GetListItem(index);
 
             T resultData = currentItem.Data;
-
             currentItem.Data = newData;
 
             modCount++;
@@ -126,16 +121,16 @@ namespace SingleLinkedList
             string methodName = "RemoveAt(int index)";
             CheckIndexInRange(methodName, index, 0, Count - 1);
 
-            ListItem<T> currentItem = Head;
+            ListItem<T> currentItem;
 
             T resultItem;
 
             if (index == 0)
             {
+                currentItem = Head;
+
                 resultItem = Head.Data;
-
                 Head = currentItem.Next;
-
                 Count--;
 
                 modCount++;
@@ -145,15 +140,10 @@ namespace SingleLinkedList
 
             if (index == Count)
             {
-                for (int i = 1; i < Count - 1; i++)
-                {
-                    currentItem = currentItem.Next;
-                }
+                currentItem = GetListItem(Count - 2);
 
                 resultItem = currentItem.Next.Data;
-
                 currentItem.Next = null;
-
                 Count--;
 
                 modCount++;
@@ -161,15 +151,10 @@ namespace SingleLinkedList
                 return resultItem;
             }
 
-            for (int i = 1; i < index; i++)
-            {
-                currentItem = currentItem.Next;
-            }
+            currentItem = GetListItem(index - 1);
 
             resultItem = currentItem.Next.Data;
-
             currentItem.Next = currentItem.Next.Next;
-
             Count--;
 
             modCount++;
@@ -180,10 +165,12 @@ namespace SingleLinkedList
         //•	удаление узла по значению, пусть выдает true, если элемент был удален
         public bool Remove(T item)
         {
+            string methodName = "Remove(T item)";
+            CheckOnEmptyList(methodName, this);
+
             if (Equals(Head.Data, item))
             {
                 Head = Head.Next;
-
                 Count--;
 
                 modCount++;
@@ -198,7 +185,6 @@ namespace SingleLinkedList
                 if (Equals(currentItem.Next.Data, item))
                 {
                     currentItem.Next = currentItem.Next.Next;
-
                     Count--;
 
                     modCount++;
@@ -212,18 +198,23 @@ namespace SingleLinkedList
             return false;
         }
 
+        private static void CheckOnEmptyList(string methodName, SingleLinkedList<T> list)
+        {
+            if (list.Count == 0 || Equals(list.Head, null))
+            {
+                string errorMessage = string.Format(WarningStrings.EmptyList, methodName);
+                throw new NullReferenceException(errorMessage);
+            }
+        }
+
         //•	удаление первого элемента, пусть выдает значение элемента
         public T RemoveFirst()
         {
-            if (Count == 0)
-            {
-                throw new Exception();
-            }
+            string methodName = "RemoveFirst()";
+            CheckOnEmptyList(methodName, this);
 
             T headData = Head.Data;
-
             Head = Head.Next;
-
             Count--;
 
             modCount++;
@@ -255,6 +246,9 @@ namespace SingleLinkedList
         //•	копирование списка
         public static void Copy(SingleLinkedList<T> sourceList, SingleLinkedList<T> destinationList)
         {
+            string methodName = "Copy(sourceList, destinationList)";
+            CheckOnEmptyList(methodName, sourceList);
+
             ListItem<T> currentSourceItem = sourceList.Head;
             ListItem<T> currentDestinationItem = new ListItem<T>(sourceList.Head.Data);
 
@@ -269,8 +263,12 @@ namespace SingleLinkedList
             }
         }
 
+        //7. Итератор упадет на пустом списке
         public IEnumerator<T> GetEnumerator()
         {
+            string methodName = "GetEnumerator()";
+            CheckOnEmptyList(methodName, this);
+
             int currentModCount = modCount;
 
             ListItem<T> currentItem = Head;
