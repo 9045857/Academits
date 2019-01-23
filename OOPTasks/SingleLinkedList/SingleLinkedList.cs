@@ -165,7 +165,7 @@ namespace SingleLinkedList
         //•	удаление узла по значению, пусть выдает true, если элемент был удален
         public bool Remove(T item)
         {
-            if (Count == 0 || Head == null)
+            if (Count == 0)
             {
                 return false;
             }
@@ -202,7 +202,7 @@ namespace SingleLinkedList
 
         private static void CheckOnEmptyList(string methodName, SingleLinkedList<T> list)
         {
-            if (list.Count == 0 || Equals(list.Head, null))
+            if (list.Count == 0)
             {
                 string errorMessage = string.Format(WarningStrings.EmptyList, methodName);
                 throw new NullReferenceException(errorMessage);
@@ -227,23 +227,23 @@ namespace SingleLinkedList
         //•	разворот списка за линейное время
         public void Reverse()
         {
-            if (Equals(Head, null))
+            if (ReferenceEquals(Head, null))
             {
                 return;
             }
 
             ListItem<T> currentItem = Head;
-            ListItem<T> previewItem = null;
+            ListItem<T> previousItem = null;
 
-            while (currentItem.Next != null)
+            while (!ReferenceEquals(currentItem.Next, null))
             {
                 ListItem<T> nextItem = currentItem.Next;
-                currentItem.Next = previewItem;
-                previewItem = currentItem;
+                currentItem.Next = previousItem;
+                previousItem = currentItem;
                 currentItem = nextItem;
             }
 
-            currentItem.Next = previewItem;
+            currentItem.Next = previousItem;
             Head = currentItem;
 
             modCount++;
@@ -252,7 +252,7 @@ namespace SingleLinkedList
         //•	копирование списка
         public static void Copy(SingleLinkedList<T> sourceList, SingleLinkedList<T> destinationList)
         {
-            if (sourceList.Count == 0 || Equals(sourceList.Head, null))
+            if (sourceList.Count == 0)
             {
                 destinationList.Count = 0;
                 destinationList.Head = null;
@@ -266,7 +266,7 @@ namespace SingleLinkedList
             destinationList.Head = currentDestinationItem;
             destinationList.Count = sourceList.Count;
 
-            while (currentSourceItem.Next != null)
+            while (!ReferenceEquals(currentSourceItem.Next, null))
             {
                 currentDestinationItem.Next = new ListItem<T>(currentSourceItem.Next.Data);
                 currentSourceItem = currentSourceItem.Next;
@@ -279,7 +279,7 @@ namespace SingleLinkedList
         {
             int currentModCount = modCount;
 
-            for (ListItem<T> currentItem = Head; currentItem != null; currentItem = currentItem.Next)
+            for (ListItem<T> currentItem = Head; !ReferenceEquals(currentItem, null); currentItem = currentItem.Next)
             {
                 if (currentModCount != modCount)
                 {
