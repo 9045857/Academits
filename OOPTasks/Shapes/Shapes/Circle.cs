@@ -2,7 +2,7 @@ using System;
 
 namespace L2Shapes.Shapes
 {
-    class Circle : IShape
+    public class Circle : IShape
     {
         public double Radius { get; set; }
 

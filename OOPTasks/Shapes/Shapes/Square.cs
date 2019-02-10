@@ -1,6 +1,6 @@
 namespace L2Shapes.Shapes
 {
-    class Square : IShape
+    public class Square : IShape
     {
         public double SideLength { get; set; }
 

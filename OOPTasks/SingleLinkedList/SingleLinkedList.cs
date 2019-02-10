@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace SingleLinkedList
 {
+    /// <summary>
+    /// Done
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class SingleLinkedList<T> : IEnumerable
     {
         private int modCount;

@@ -1,6 +1,6 @@
 namespace L2Shapes
 {
-    interface IShape
+    public interface IShape
     {
         double GetWidth();
         double GetHeight();
