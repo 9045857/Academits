@@ -30,14 +30,12 @@ namespace Tree
 
             int[] arrayInt = {3,4,1,3,2,0,7 };
 
-            Tree<int> tree = new Tree<int>(new TreeNode<int>(5));
+            Tree<int> tree = new Tree<int>(5);
 
             foreach (int element in arrayInt)
             {
                 tree.AddNode(element);
             }
-
-            Console.WriteLine(tree.Root.Data);
 
             Console.WriteLine(tree.Contains(0));
             Console.WriteLine(tree.Contains(6));
@@ -45,13 +43,17 @@ namespace Tree
             Action<int> action = Console.WriteLine;
 
             Console.WriteLine("Обход в ширину без рекурсии");
-            tree.BFS(action);
+            tree.BreadthFirstSearch(action);
 
             Console.WriteLine("Обход в глубину без рекурсии");
-            tree.DFS(action);
+            tree.DepthFirstSearch(action);
 
             Console.WriteLine("Обход в глубину с рекурсией");
-            tree.DFSRecursion(action);
+            tree.DepthFirstSearchRecursion(action);
+
+            Console.WriteLine("Удалим 2 и обойдем в ширину");
+            tree.Remove(2);
+            tree.BreadthFirstSearch(action);
         }
     }
 }

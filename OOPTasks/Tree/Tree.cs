@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tree
 {
     class Tree<T>
     {
-        public TreeNode<T> Root;
-        private IComparer<T> nodeComparer;
+        private TreeNode<T> root;
+        private readonly IComparer<T> comparer;
 
-        public Tree(TreeNode<T> root, IComparer<T> comparer)
+        public Tree(T data, IComparer<T> comparer)
         {
-            nodeComparer = comparer;
-            Root = root;
+            this.comparer = comparer;
+            root = new TreeNode<T>(data);
             Count = 1;
         }
 
-        public Tree(TreeNode<T> root)
+        public Tree(T data)
         {
-            Root = root;
-            nodeComparer = Comparer<T>.Default;
+            root = new TreeNode<T>(data);
+            comparer = Comparer<T>.Default;
             Count = 1;
         }
 
@@ -31,41 +28,39 @@ namespace Tree
         /// <param name="data"></param>
         public void AddNode(T data)
         {
+            if (Equals(root, null))
+            {
+                root = new TreeNode<T>(data);
+                Count = 1;
+                return;
+            }
+
             Count++;
-
-            TreeNode<T> currentNode = Root;
-
-            Console.WriteLine("{0}:", data);
+            TreeNode<T> currentNode = root;
 
             while (!ReferenceEquals(currentNode, null))
             {
-                if (nodeComparer.Compare(currentNode.Data, data) > 0)
+                if (comparer.Compare(currentNode.Data, data) > 0)
                 {
                     if (!ReferenceEquals(currentNode.LeftChild, null))
                     {
-                        Console.WriteLine("{0} <- {1}", currentNode.LeftChild.Data, currentNode.Data);
-
                         currentNode = currentNode.LeftChild;
                     }
                     else
                     {
                         currentNode.LeftChild = new TreeNode<T>(data, currentNode);
-                        Console.WriteLine("| {0} | <- {1}", data, currentNode.Data);
                         return;
                     }
                 }
-                else //if (nodeComparer.Compare(currentNode.Data, data) < 0)
+                else
                 {
                     if (!ReferenceEquals(currentNode.RightChild, null))
                     {
-                        Console.WriteLine("{1} -> {0}", currentNode.RightChild.Data, currentNode.Data);
-
                         currentNode = currentNode.RightChild;
                     }
                     else
                     {
                         currentNode.RightChild = new TreeNode<T>(data, currentNode);
-                        Console.WriteLine("{1} -> | {0} |", data, currentNode.Data);
                         return;
                     }
                 }
@@ -79,15 +74,17 @@ namespace Tree
         /// <returns></returns>
         private TreeNode<T> NodeOf(T data)
         {
-            TreeNode<T> currentNode = Root;
+            TreeNode<T> currentNode = root;
 
             while (!ReferenceEquals(currentNode, null))
             {
-                if (nodeComparer.Compare(currentNode.Data, data) == 0)
+                int nodeCompare = comparer.Compare(currentNode.Data, data);
+
+                if (nodeCompare == 0)
                 {
                     return currentNode;
                 }
-                else if (nodeComparer.Compare(currentNode.Data, data) > 0)
+                else if (nodeCompare > 0)
                 {
                     if (!ReferenceEquals(currentNode.LeftChild, null))
                     {
@@ -98,10 +95,62 @@ namespace Tree
                         return null;
                     }
                 }
-                else //if (nodeComparer.Compare(currentNode.Data, data) < 0)
+                else
                 {
                     if (!ReferenceEquals(currentNode.RightChild, null))
                     {
+                        currentNode = currentNode.RightChild;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получение первого узла по значению
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private TreeNode<T> NodeParentOf(T data)
+        {
+            if (comparer.Compare(root.Data, data) == 0)
+            {
+                return null;
+            }
+         
+            TreeNode<T> currentParentNode = root;
+            TreeNode<T> currentNode = root;
+
+            while (!ReferenceEquals(currentNode, null))
+            {
+                int nodeCompare = comparer.Compare(currentNode.Data, data);
+
+                if (nodeCompare == 0)
+                {
+                    return currentParentNode;
+                }
+                else if (nodeCompare > 0)
+                {
+                    if (!ReferenceEquals(currentNode.LeftChild, null))
+                    {
+                        currentParentNode = currentNode;
+                        currentNode = currentNode.LeftChild;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    if (!ReferenceEquals(currentNode.RightChild, null))
+                    {
+                        currentParentNode = currentNode;
                         currentNode = currentNode.RightChild;
                     }
                     else
@@ -130,11 +179,33 @@ namespace Tree
         /// <param name="data"></param>
         public void Remove(T data)
         {
-            TreeNode<T> removedNode = NodeOf(data);
+            //Определим узел и его родителя
+            TreeNode<T> removedNodeParent = NodeParentOf(data);
+            TreeNode<T> removedNode;
 
-            if (ReferenceEquals(removedNode, null))
+            if (ReferenceEquals(removedNodeParent, null))
             {
-                return;
+                int comparer = this.comparer.Compare(root.Data, data);
+
+                if (comparer == 0)
+                {
+                    removedNode = root;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (!ReferenceEquals(removedNodeParent.LeftChild, null) && comparer.Compare(removedNodeParent.LeftChild.Data, data) == 0)
+                {
+                    removedNode = removedNodeParent.LeftChild;
+                }
+                else
+                {
+                    removedNode = removedNodeParent.RightChild;
+                }
             }
 
             Count--;
@@ -142,13 +213,14 @@ namespace Tree
             //•Удаление листа – у родителя зануляем ссылку на удаляемый узел
             if (ReferenceEquals(removedNode.LeftChild, null) && ReferenceEquals(removedNode.RightChild, null))
             {
-                if (Equals(removedNode.Parent.LeftChild, removedNode))
+
+                if (ReferenceEquals(removedNodeParent.LeftChild, removedNode))
                 {
-                    removedNode.Parent.LeftChild = null;
+                    removedNodeParent.LeftChild = null;
                 }
                 else
                 {
-                    removedNode.Parent.RightChild = null;
+                    removedNodeParent.RightChild = null;
                 }
                 return;
             }
@@ -156,51 +228,54 @@ namespace Tree
             //•Удаление узла с одним ребенком – у родителя подменяем ссылку с удаляемого узла на его ребенка
             if (ReferenceEquals(removedNode.LeftChild, null) && !ReferenceEquals(removedNode.RightChild, null))
             {
-                if (Equals(removedNode.Parent.LeftChild, removedNode))
+                if (ReferenceEquals(removedNodeParent.LeftChild, removedNode))
                 {
-                    removedNode.Parent.LeftChild = removedNode.RightChild;
+                    removedNodeParent.LeftChild = removedNode.RightChild;
                 }
                 else
                 {
-                    removedNode.Parent.RightChild = removedNode.RightChild;
+                    removedNodeParent.RightChild = removedNode.RightChild;
                 }
                 return;
             }
             else if (!ReferenceEquals(removedNode.LeftChild, null) && ReferenceEquals(removedNode.RightChild, null))
             {
-                if (Equals(removedNode.Parent.LeftChild, removedNode))
+                if (Equals(removedNodeParent.LeftChild, removedNode))
                 {
-                    removedNode.Parent.LeftChild = removedNode.LeftChild;
+                    removedNodeParent.LeftChild = removedNode.LeftChild;
                 }
                 else
                 {
-                    removedNode.Parent.RightChild = removedNode.LeftChild;
+                    removedNodeParent.RightChild = removedNode.LeftChild;
                 }
                 return;
             }
 
             //•Удаление узла с двумя детьми 
             TreeNode<T> leftmostNode = removedNode.LeftChild;
+            TreeNode<T> leftmostNodeParent = removedNode;
 
             while (!ReferenceEquals(leftmostNode.LeftChild, null))
             {
+                leftmostNodeParent = leftmostNode;
                 leftmostNode = leftmostNode.LeftChild;
             }
 
             if (!ReferenceEquals(leftmostNode.RightChild, null))
             {
-                leftmostNode.Parent.LeftChild = leftmostNode.RightChild;
+
+                leftmostNodeParent.LeftChild = leftmostNode.RightChild;
             }
 
-            if (Equals(removedNode.Parent.RightChild, removedNode))
+            if (ReferenceEquals(removedNodeParent.RightChild, removedNode))
             {
-                removedNode.Parent.RightChild = leftmostNode;
+                removedNodeParent.RightChild = leftmostNode;
                 leftmostNode.LeftChild = removedNode.LeftChild;
                 leftmostNode.RightChild = removedNode.RightChild;
             }
             else
             {
-                removedNode.Parent.LeftChild = leftmostNode;
+                removedNodeParent.LeftChild = leftmostNode;
                 leftmostNode.LeftChild = removedNode.LeftChild;
                 leftmostNode.RightChild = removedNode.RightChild;
             }
@@ -215,11 +290,15 @@ namespace Tree
         /// Обход в ширину (Breadth-First Search) с выполнним действия Action<T> action
         /// </summary>
         /// <param name="action"></param>
-        public void BFS(Action<T> action)
+        public void BreadthFirstSearch(Action<T> action)
         {
-            Queue<TreeNode<T>> treeQueue = new Queue<TreeNode<T>>();
+            if (Equals(root, null))
+            {
+                return;
+            }
 
-            TreeNode<T> currrentNode = Root;
+            Queue<TreeNode<T>> treeQueue = new Queue<TreeNode<T>>();
+            TreeNode<T> currrentNode = root;
             treeQueue.Enqueue(currrentNode);
 
             while (treeQueue.Count != 0)
@@ -243,10 +322,15 @@ namespace Tree
         /// Обход в глубину (Depth-First Search) без рекурсии
         /// </summary>
         /// <param name="action"></param>
-        public void DFS(Action<T> action)
+        public void DepthFirstSearch(Action<T> action)
         {
+            if (Equals(root, null))
+            {
+                return;
+            }
+
             Stack<TreeNode<T>> treeStack = new Stack<TreeNode<T>>();
-            TreeNode<T> currentNode = Root;
+            TreeNode<T> currentNode = root;
 
             treeStack.Push(currentNode);
 
@@ -290,9 +374,14 @@ namespace Tree
         /// Обход в глубину с рекурсией
         /// </summary>
         /// <param name="action"></param>
-        public void DFSRecursion(Action<T> action)
+        public void DepthFirstSearchRecursion(Action<T> action)
         {
-            Visit(Root, action);
+            if (Equals(root, null))
+            {
+                return;
+            }
+
+            Visit(root, action);
         }
     }
 }

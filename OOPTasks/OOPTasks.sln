@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingleLinkedList", "SingleL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tree", "Tree\Tree.csproj", "{783D3225-5D4C-426F-B8C9-3888F565DA16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{712CF17B-34DB-44E7-B5C0-658897147148}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{783D3225-5D4C-426F-B8C9-3888F565DA16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783D3225-5D4C-426F-B8C9-3888F565DA16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{783D3225-5D4C-426F-B8C9-3888F565DA16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{712CF17B-34DB-44E7-B5C0-658897147148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{712CF17B-34DB-44E7-B5C0-658897147148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{712CF17B-34DB-44E7-B5C0-658897147148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{712CF17B-34DB-44E7-B5C0-658897147148}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
