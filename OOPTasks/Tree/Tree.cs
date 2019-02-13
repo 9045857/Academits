@@ -48,7 +48,7 @@ namespace Tree
                     }
                     else
                     {
-                        currentNode.LeftChild = new TreeNode<T>(data, currentNode);
+                        currentNode.LeftChild = new TreeNode<T>(data);
                         return;
                     }
                 }
@@ -60,7 +60,7 @@ namespace Tree
                     }
                     else
                     {
-                        currentNode.RightChild = new TreeNode<T>(data, currentNode);
+                        currentNode.RightChild = new TreeNode<T>(data);
                         return;
                     }
                 }
@@ -122,7 +122,7 @@ namespace Tree
             {
                 return null;
             }
-         
+
             TreeNode<T> currentParentNode = root;
             TreeNode<T> currentNode = root;
 
