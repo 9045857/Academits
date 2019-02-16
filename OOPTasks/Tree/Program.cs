@@ -19,7 +19,7 @@ namespace Tree
             //tree.AddNode(s1);
 
 
-            int[] arrayInt = {3,4,1,3,2,0,7 };
+            int[] arrayInt = { 3, 4, 1, 3, 2, 0, 7 };
 
             Tree<int> tree = new Tree<int>(5);
 
@@ -49,6 +49,33 @@ namespace Tree
             Console.WriteLine("Удалим корень 5 и обойдем в глубину");
             tree.Remove(5);
             tree.DepthFirstSearch(action);
+
+            Console.WriteLine("Дерево с одним элементом");
+            Tree<int> tree2 = new Tree<int>(111);
+            tree2.DepthFirstSearch(action);
+
+            Console.WriteLine("удалим корень");
+            tree2.Remove(111);
+            tree2.DepthFirstSearch(action);
+
+            Console.WriteLine("Конец");
+
+            Console.WriteLine("Дерево только с правой веткой");
+            Tree<int> tree3 = new Tree<int>(0);
+
+            tree3.AddNode(1);
+            tree3.AddNode(2);
+            tree3.AddNode(3);
+            tree3.AddNode(4);
+            tree3.AddNode(5);
+
+            tree3.DepthFirstSearch(action);
+
+            Console.WriteLine("удалим 3");
+            tree3.Remove(3);
+
+            tree3.DepthFirstSearch(action);
+            tree3.BreadthFirstSearch(action);
         }
     }
 }

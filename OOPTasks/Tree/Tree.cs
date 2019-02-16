@@ -300,11 +300,7 @@ namespace Tree
 
             leftmostNode.LeftChild = removedNode.LeftChild;// передача левого ребенка
            
-            if (ReferenceEquals(leftmostNode, removedNode.RightChild))
-            {
-                leftmostNode.RightChild = null; //передача самого левого ребенка, в ситуации, когда он первый, т.е. правый.
-            }
-            else
+            if (!ReferenceEquals(leftmostNode, removedNode.RightChild))// ситуация, когда самый левый ребенок не явлется первым, т.е. правым.
             {
                 leftmostNode.RightChild = removedNode.RightChild;
                 leftmostNodeParent.LeftChild = null;
