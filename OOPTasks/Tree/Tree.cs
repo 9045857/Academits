@@ -28,7 +28,7 @@ namespace Tree
         /// <param name="data"></param>
         public void AddNode(T data)
         {
-            if (Equals(root, null))
+            if (ReferenceEquals(root, null))
             {
                 root = new TreeNode<T>(data);
                 Count = 1;
@@ -177,11 +177,13 @@ namespace Tree
         /// Удаление первого вхождения узла по значению 
         /// </summary>
         /// <param name="data"></param>
-        public void Remove(T data)
+        public bool Remove(T data)
         {
             //Определим узел и его родителя
             TreeNode<T> removedNodeParent = NodeParentOf(data);
             TreeNode<T> removedNode;
+
+            bool isRemoveRoot=false;
 
             if (ReferenceEquals(removedNodeParent, null))
             {
@@ -190,10 +192,13 @@ namespace Tree
                 if (comparer == 0)
                 {
                     removedNode = root;
+                    removedNodeParent = new TreeNode<T>();//псевдородитель корня, нужен для работы алгоритма в стандарном виде
+                    removedNodeParent.LeftChild = removedNode;
+                    isRemoveRoot = true;
                 }
                 else
                 {
-                    return;
+                    return false;
                 }
             }
             else
@@ -213,6 +218,11 @@ namespace Tree
             //•Удаление листа – у родителя зануляем ссылку на удаляемый узел
             if (ReferenceEquals(removedNode.LeftChild, null) && ReferenceEquals(removedNode.RightChild, null))
             {
+                if (isRemoveRoot)
+                {
+                    root = null;
+                    return true;
+                }
 
                 if (ReferenceEquals(removedNodeParent.LeftChild, removedNode))
                 {
@@ -222,12 +232,18 @@ namespace Tree
                 {
                     removedNodeParent.RightChild = null;
                 }
-                return;
+                return true;
             }
 
             //•Удаление узла с одним ребенком – у родителя подменяем ссылку с удаляемого узла на его ребенка
             if (ReferenceEquals(removedNode.LeftChild, null) && !ReferenceEquals(removedNode.RightChild, null))
             {
+                if (isRemoveRoot)
+                {
+                    root = removedNode.RightChild;
+                    return true;
+                }
+
                 if (ReferenceEquals(removedNodeParent.LeftChild, removedNode))
                 {
                     removedNodeParent.LeftChild = removedNode.RightChild;
@@ -235,11 +251,18 @@ namespace Tree
                 else
                 {
                     removedNodeParent.RightChild = removedNode.RightChild;
-                }
-                return;
+                }               
+
+                return true;
             }
             else if (!ReferenceEquals(removedNode.LeftChild, null) && ReferenceEquals(removedNode.RightChild, null))
             {
+                if (isRemoveRoot)
+                {
+                    root = removedNode.LeftChild;
+                    return true;
+                }
+
                 if (Equals(removedNodeParent.LeftChild, removedNode))
                 {
                     removedNodeParent.LeftChild = removedNode.LeftChild;
@@ -248,11 +271,11 @@ namespace Tree
                 {
                     removedNodeParent.RightChild = removedNode.LeftChild;
                 }
-                return;
+                return true;
             }
 
             //•Удаление узла с двумя детьми 
-            TreeNode<T> leftmostNode = removedNode.LeftChild;
+            TreeNode<T> leftmostNode = removedNode.RightChild;//первый шаг - уходим вправо, потом будем идти только влево.
             TreeNode<T> leftmostNodeParent = removedNode;
 
             while (!ReferenceEquals(leftmostNode.LeftChild, null))
@@ -263,22 +286,36 @@ namespace Tree
 
             if (!ReferenceEquals(leftmostNode.RightChild, null))
             {
-
                 leftmostNodeParent.LeftChild = leftmostNode.RightChild;
-            }
+            }           
 
             if (ReferenceEquals(removedNodeParent.RightChild, removedNode))
             {
                 removedNodeParent.RightChild = leftmostNode;
-                leftmostNode.LeftChild = removedNode.LeftChild;
-                leftmostNode.RightChild = removedNode.RightChild;
             }
             else
             {
                 removedNodeParent.LeftChild = leftmostNode;
-                leftmostNode.LeftChild = removedNode.LeftChild;
-                leftmostNode.RightChild = removedNode.RightChild;
             }
+
+            leftmostNode.LeftChild = removedNode.LeftChild;// передача левого ребенка
+           
+            if (ReferenceEquals(leftmostNode, removedNode.RightChild))
+            {
+                leftmostNode.RightChild = null; //передача самого левого ребенка, в ситуации, когда он первый, т.е. правый.
+            }
+            else
+            {
+                leftmostNode.RightChild = removedNode.RightChild;
+                leftmostNodeParent.LeftChild = null;
+            }
+                                 
+            if (isRemoveRoot)
+            {
+                root = leftmostNode;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -292,7 +329,7 @@ namespace Tree
         /// <param name="action"></param>
         public void BreadthFirstSearch(Action<T> action)
         {
-            if (Equals(root, null))
+            if (ReferenceEquals(root, null))
             {
                 return;
             }
@@ -324,7 +361,7 @@ namespace Tree
         /// <param name="action"></param>
         public void DepthFirstSearch(Action<T> action)
         {
-            if (Equals(root, null))
+            if (ReferenceEquals(root, null))
             {
                 return;
             }

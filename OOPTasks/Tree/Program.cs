@@ -1,13 +1,4 @@
-
-using L2Shapes;
-using L2Shapes.Shapes;
-using L2Shapes.ShapesComparers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-
 
 namespace Tree
 {
@@ -51,9 +42,13 @@ namespace Tree
             Console.WriteLine("Обход в глубину с рекурсией");
             tree.DepthFirstSearchRecursion(action);
 
-            Console.WriteLine("Удалим 2 и обойдем в ширину");
+            Console.WriteLine("Удалим 2 и обойдем в глубину");
             tree.Remove(2);
-            tree.BreadthFirstSearch(action);
+            tree.DepthFirstSearch(action);
+
+            Console.WriteLine("Удалим корень 5 и обойдем в глубину");
+            tree.Remove(5);
+            tree.DepthFirstSearch(action);
         }
     }
 }

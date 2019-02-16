@@ -6,6 +6,10 @@
         public TreeNode<T> LeftChild { get; set; }
         public TreeNode<T> RightChild { get; set; }
 
+        public TreeNode()
+        {            
+        }
+
         public TreeNode(T data)
         {
             Data = data;
