@@ -1,30 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Graph
 {
-    class Graph<T>
+    class Graph
     {
-        private T[] nodes;
         private int[,] graphs;
-
-        public int Count { get; private set; }
-
-        public Graph(T[] nodes, int[,] graphs)
-        {
-            Count = nodes.Length;
-            Array.Copy(nodes, this.nodes, nodes.Length);
-            graphs = Get2DIntArrayCopy(graphs);
-        }
 
         public Graph(int[,] graphs)
         {
             Count = graphs.GetLength(0);
-            graphs = Get2DIntArrayCopy(graphs);
+            this.graphs = Get2DIntArrayCopy(graphs);
         }
+
+        public virtual int Count { get; private set; }
 
         private int[,] Get2DIntArrayCopy(int[,] sourceArray)
         {
@@ -39,39 +28,91 @@ namespace Graph
             return destinationArray;
         }
 
-        public void BreadthFirstSearch()
+        public virtual void DepthFirstSearch(int startIndex, Action<int> action)
         {
-            bool[] visite=new bool[Count];
-
-            Queue<int> queueSearch=new Queue<int>();
-
-            for (int i = 0; i < Count; i++)
+            if (startIndex < 0 || startIndex >= Count)
             {
-                if (!visite[i])
-                {
-                    queueSearch.Enqueue(i);
-                    visite[i] = true;
-                }
+                throw new IndexOutOfRangeException("ОШИБКА: стартовый индекс ОБХОДА В ГЛУБИНУ вне диапазона индексов графа");
+            }
+
+            bool[] isVisites = new bool[Count];
+
+            Stack<int> stackSearch = new Stack<int>();
+            stackSearch.Push(startIndex);
+
+            isVisites[startIndex] = true;
+
+            while (stackSearch.Count != 0)
+            {
+                int currentIndex = stackSearch.Pop();
+                action(currentIndex);
 
                 for (int j = 0; j < Count; j++)
                 {
-                    if (!visite[j])
+                    if (graphs[currentIndex, j] != 0 && !isVisites[j])
                     {
-                        queueSearch.Enqueue(graphs[i,j]);
-                        visite[j] = true;
+                        stackSearch.Push(j);
+                        isVisites[j] = true;
                     }
-
                 }
 
+                if (stackSearch.Count == 0)
+                {
+                    for (int k = 0; k < Count; k++)
+                    {
+                        if (!isVisites[k])
+                        {
+                            stackSearch.Push(k);
+                            isVisites[k] = true;
 
-
+                            break;
+                        }
+                    }
+                }
             }
-
         }
 
+        public virtual void BreadthFirstSearch(int startIndex, Action<int> action)
+        {
+            if (startIndex < 0 || startIndex >= Count)
+            {
+                throw new IndexOutOfRangeException("ОШИБКА: стартовый индекс ОБХОДА В ШИРИНУ вне диапазона индексов графа");
+            }
 
+            bool[] isVisites = new bool[Count];
 
+            Queue<int> queueSearch = new Queue<int>();
+            queueSearch.Enqueue(startIndex);
+            isVisites[startIndex] = true;
 
+            while (queueSearch.Count != 0)
+            {
+                int currentIndex = queueSearch.Dequeue();
+                action(currentIndex);
 
+                for (int j = 0; j < Count; j++)
+                {
+                    if (graphs[currentIndex, j] != 0 && !isVisites[j])
+                    {
+                        queueSearch.Enqueue(j);
+                        isVisites[j] = true;
+                    }
+                }
+
+                if (queueSearch.Count == 0)
+                {
+                    for (int k = 0; k < Count; k++)
+                    {
+                        if (!isVisites[k])
+                        {
+                            queueSearch.Enqueue(k);
+                            isVisites[k] = true;
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

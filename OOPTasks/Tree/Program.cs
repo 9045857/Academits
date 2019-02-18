@@ -76,6 +76,22 @@ namespace Tree
 
             tree3.DepthFirstSearch(action);
             tree3.BreadthFirstSearch(action);
+
+            Console.WriteLine("Дерево только с левой веткой");
+            tree2.AddNode(10);
+            tree2.AddNode(9);
+            tree2.AddNode(8);
+            tree2.AddNode(7);
+            tree2.AddNode(6);
+            tree2.AddNode(5);
+
+            tree2.BreadthFirstSearch(action);
+
+            Console.WriteLine("Удалим корень");
+            tree2.Remove(10);
+
+            tree2.BreadthFirstSearch(action);
+
         }
     }
 }
