@@ -183,7 +183,7 @@ namespace Tree
             TreeNode<T> removedNodeParent = NodeParentOf(data);
             TreeNode<T> removedNode;
 
-            bool isRemoveRoot=false;
+            bool isRemoveRoot = false;
 
             if (ReferenceEquals(removedNodeParent, null))
             {
@@ -251,7 +251,7 @@ namespace Tree
                 else
                 {
                     removedNodeParent.RightChild = removedNode.RightChild;
-                }               
+                }
 
                 return true;
             }
@@ -287,7 +287,7 @@ namespace Tree
             if (!ReferenceEquals(leftmostNode.RightChild, null))
             {
                 leftmostNodeParent.LeftChild = leftmostNode.RightChild;
-            }           
+            }
 
             if (ReferenceEquals(removedNodeParent.RightChild, removedNode))
             {
@@ -299,13 +299,13 @@ namespace Tree
             }
 
             leftmostNode.LeftChild = removedNode.LeftChild;// передача левого ребенка
-           
+
             if (!ReferenceEquals(leftmostNode, removedNode.RightChild))// ситуация, когда самый левый ребенок не явлется первым, т.е. правым.
             {
                 leftmostNode.RightChild = removedNode.RightChild;
                 leftmostNodeParent.LeftChild = null;
             }
-                                 
+
             if (isRemoveRoot)
             {
                 root = leftmostNode;
