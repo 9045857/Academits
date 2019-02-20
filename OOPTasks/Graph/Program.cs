@@ -26,6 +26,9 @@ namespace Graph
 
             Console.WriteLine("Обход в глубину");
             graph.DepthFirstSearch(2, action);
+
+            Console.WriteLine("Обход в глубину с Рекурсией");
+            graph.DepthFirstSearchRecursion(2, action);
         }
     }
 }
