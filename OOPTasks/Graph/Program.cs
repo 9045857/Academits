@@ -9,9 +9,9 @@ namespace Graph
             int[,] graphArray = //несвзянный граф из лекции, добавлен путь A-С
             {
                 {0, 1, 1, 0, 0, 0, 0 },
-                {1, 0, 1, 0, 0, 0, 0 },
+                {1, 0, 1, 1, 0, 0, 0 },
                 {1, 1, 0, 1, 0, 0, 0 },
-                {0, 0, 1, 0, 0, 0, 0 },
+                {0, 1, 1, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 1 },
                 {0, 0, 0, 0, 0, 1, 0 }
@@ -22,13 +22,13 @@ namespace Graph
             Action<int> action = Console.WriteLine;
 
             Console.WriteLine("Обход в ширину");
-            graph.BreadthFirstSearch(2, action);
+            graph.BreadthFirstSearch(3, action);
 
             Console.WriteLine("Обход в глубину");
-            graph.DepthFirstSearch(2, action);
+            graph.DepthFirstSearch(3, action);
 
             Console.WriteLine("Обход в глубину с Рекурсией");
-            graph.DepthFirstSearchRecursion(2, action);
+            graph.DepthFirstSearchRecursion(3, action);
         }
     }
 }

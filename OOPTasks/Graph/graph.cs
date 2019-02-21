@@ -11,7 +11,7 @@ namespace Graph
         {
             if (graph.GetLength(0) != graph.GetLength(1))
             {
-                throw new Exception("ОШИБКА: конструктор графа передана не квадратная матрица связнности");
+                throw new ArgumentException("ОШИБКА: конструктору графа передана не квадратная матрица связнности");
             }
 
             Count = graph.GetLength(0);
@@ -82,7 +82,7 @@ namespace Graph
             }
         }
 
-        void RecursionVisite(int index, int[,] graph, bool[] isVisited, Action<int> action)
+        private void RecursiveVisit(int index, int[,] graph, bool[] isVisited, Action<int> action)
         {
             action(index);
 
@@ -91,7 +91,7 @@ namespace Graph
                 if (graph[index, i] != 0 && !isVisited[i])
                 {
                     isVisited[i] = true;
-                    RecursionVisite(i, graph, isVisited, action);
+                    RecursiveVisit(i, graph, isVisited, action);
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace Graph
 
             while (isProcessDoing)
             {
-                RecursionVisite(index, graph, isVisited, action);
+                RecursiveVisit(index, graph, isVisited, action);
 
                 isProcessDoing = false;
 
@@ -146,6 +146,7 @@ namespace Graph
             queueSearch.Enqueue(startIndex);
             isVisites[startIndex] = true;
 
+            int startVisitedIndexCheck = 0;
             while (queueSearch.Count != 0)
             {
                 int currentIndex = queueSearch.Dequeue();
@@ -162,12 +163,13 @@ namespace Graph
 
                 if (queueSearch.Count == 0)
                 {
-                    for (int k = 0; k < Count; k++)
+                    for (int k = startVisitedIndexCheck; k < Count; k++)
                     {
                         if (!isVisites[k])
                         {
                             queueSearch.Enqueue(k);
                             isVisites[k] = true;
+                            startVisitedIndexCheck = k + 1;
 
                             break;
                         }

@@ -11,7 +11,7 @@ namespace Lambda
         public string Name { get; set; }
         public int Age { get; set; }
 
-        Person(string name, int age)
+        public Person(string name, int age)
         {
             Name = name;
             Age = age;
