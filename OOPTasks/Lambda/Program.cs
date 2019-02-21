@@ -34,54 +34,45 @@ namespace Lambda
 
             //•При помощи лямбда - функций:
             //•А) получить список уникальных имен
-
-            //List<string> uniqueNames = new List<string>();
-
-            //people.ForEach((Person element) =>
-            //{
-            //    if (!uniqueNames.Contains(element.Name))
-            //    {
-            //        uniqueNames.Add(element.Name);
-            //    }
-            //});
-
-            //Console.WriteLine("Список уникальных имен:");            
-            //uniqueNames.ForEach((string element) => Console.WriteLine(element));
-
-
-
-            List<string> uniqueNames = people.Select(x => x.Name);
-
-            //.Distinct<string>();
-
-            //;
-
-
-            //people.ForEach((Person element) =>
-            //{
-            //    if (!uniqueNames.Contains(element.Name))
-            //    {
-            //        uniqueNames.Add(element.Name);
-            //    }
-            //});
-
             Console.WriteLine("Список уникальных имен:");
-            uniqueNames.ForEach((string element) => Console.WriteLine(element));
 
+            List<string> uniqueNames = people
+                .Select(x => x.Name)
+                .Distinct()
+                .ToList();
 
-
-
-
-
-
+            uniqueNames.ForEach(element => Console.WriteLine(element));
+            Console.WriteLine();
 
             //•Б) вывести список уникальных имен в формате: Имена: Иван, Сергей, Петр.
-
             Console.WriteLine("Список уникальных имен в строку, разделенных запятой:");
-            uniqueNames.ForEach((string element) => Console.WriteLine(element));
 
+            // вариант вывода уникальных имен из специального списка
+            //string allNamesString = string.Join(", ", uniqueNames.Select(p => p));
+
+            // вариант вывода уникальных имен из общего списка
+            string allUniqueNames = string.Join(", ", people
+                .Select(p => p.Name)
+                .Distinct());
+
+            Console.WriteLine(allUniqueNames);
 
             //•В) получить список людей младше 18, посчитать для них средний возраст
+            List<Person> peopleUnder18 = people
+                .Where(x => x.Age < 18);
+                // .Select(x => x.Name);
+
+                /*.Select(x => x)*///;
+
+
+            double averageAge = people
+                .Select(x => x.Age)
+                .Where(x => x < 18)
+                .Average();
+
+            Console.WriteLine(averageAge);
+
+
             //•Г) при помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
             //•Д) получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
 

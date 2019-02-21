@@ -82,7 +82,7 @@ namespace Graph
             }
         }
 
-        private void RecursiveVisit(int index, int[,] graph, bool[] isVisited, Action<int> action)
+        private void RecursiveVisit(int index, bool[] isVisited, Action<int> action)
         {
             action(index);
 
@@ -91,7 +91,7 @@ namespace Graph
                 if (graph[index, i] != 0 && !isVisited[i])
                 {
                     isVisited[i] = true;
-                    RecursiveVisit(i, graph, isVisited, action);
+                    RecursiveVisit(i, isVisited, action);
                 }
             }
         }
@@ -106,14 +106,14 @@ namespace Graph
             bool[] isVisited = new bool[Count];
 
             int index = startIndex;
-            isVisited[index] = true;
 
             int startVisitedIndexCheck = 0;
             bool isProcessDoing = true;
 
             while (isProcessDoing)
             {
-                RecursiveVisit(index, graph, isVisited, action);
+                isVisited[index] = true;
+                RecursiveVisit(index, isVisited, action);
 
                 isProcessDoing = false;
 
@@ -124,7 +124,6 @@ namespace Graph
                         startVisitedIndexCheck = i + 1;
                         index = i;
 
-                        isVisited[i] = true;
                         isProcessDoing = true;
 
                         break;

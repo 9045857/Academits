@@ -8,13 +8,21 @@ namespace Graph
         {
             int[,] graphArray = //несвзянный граф из лекции, добавлен путь A-С
             {
-                {0, 1, 1, 0, 0, 0, 0 },
-                {1, 0, 1, 1, 0, 0, 0 },
-                {1, 1, 0, 1, 0, 0, 0 },
-                {0, 1, 1, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 1 },
-                {0, 0, 0, 0, 0, 1, 0 }
+                //{0, 1, 1, 0, 0, 0, 0 },
+                //{1, 0, 1, 1, 0, 0, 0 },
+                //{1, 1, 0, 1, 0, 0, 0 },
+                //{0, 1, 1, 0, 0, 0, 0 },
+                //{0, 0, 0, 0, 0, 0, 0 },
+                //{0, 0, 0, 0, 0, 0, 1 },
+                //{0, 0, 0, 0, 0, 1, 0 }
+
+                {0, 1, 0, 1, 0, 0, 0},
+                {1, 0, 1, 0, 0, 0, 0},
+                {0, 1, 0, 1, 0, 0, 0},
+                {1, 0, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0}
             };
 
             Graph graph = new Graph(graphArray);
@@ -25,10 +33,10 @@ namespace Graph
             graph.BreadthFirstSearch(3, action);
 
             Console.WriteLine("Обход в глубину");
-            graph.DepthFirstSearch(3, action);
+            graph.DepthFirstSearch(0, action);
 
             Console.WriteLine("Обход в глубину с Рекурсией");
-            graph.DepthFirstSearchRecursion(3, action);
+            graph.DepthFirstSearchRecursion(0, action);
         }
     }
 }
