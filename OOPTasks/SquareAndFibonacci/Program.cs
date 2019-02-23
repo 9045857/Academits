@@ -44,11 +44,11 @@ namespace SquareAndFibonacci
 
             int number = Convert.ToInt16(Console.ReadLine());
 
-            foreach (int e in GetSquares().Take(number+1))
+            foreach (int e in GetSquares().Take(number + 1))
             {
                 Console.WriteLine(e);
             }
-            
+
             Console.WriteLine();
             Console.WriteLine("Программа вычисляет числа Фибоначчи. Количество чисел вводит пользователь");
             Console.WriteLine();
@@ -56,7 +56,7 @@ namespace SquareAndFibonacci
 
             int count = Convert.ToInt16(Console.ReadLine());
 
-            foreach (int e in  GetFibonacci().Take(count))
+            foreach (int e in GetFibonacci().Take(count))
             {
                 Console.WriteLine(e);
             }
