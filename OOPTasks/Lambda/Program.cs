@@ -78,14 +78,12 @@ namespace Lambda
 
             // расчет среднего возраста для группы людей без создания списка
             //double averageAge = people
-            //    .Select(x => x.Age)
-            //    .Where(x => x < 18)
-            //    .Average();
+            //    .Where(x => x.Age < 18)
+            //    .Average(x => x.Age);
 
             //расчет среднего возраста для ранее созданного списка
             double averageAge = peopleUnder18
-                .Select(x => x.Age)
-                .Average();
+                .Average(x => x.Age);
 
             Console.WriteLine("Средний возраст: {0}", averageAge);
 
@@ -95,7 +93,7 @@ namespace Lambda
 
             var personsByName = people
                 .GroupBy(p => p.Name)
-                .ToDictionary(p => p.Key, p => p.Select(p1 => p1.Age).Average());
+                .ToDictionary(p => p.Key, p => p.Average(p1 => p1.Age));
 
             foreach (KeyValuePair<string, double> keyValue in personsByName)
             {
