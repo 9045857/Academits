@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquareAndFibonacci
 {
@@ -46,15 +44,22 @@ namespace SquareAndFibonacci
 
             int number = Convert.ToInt16(Console.ReadLine());
 
-
-
-            foreach (int e in GetSquares().Where(x => x > 0 && x < number*number))
+            foreach (int e in GetSquares().Take(number+1))
             {
                 Console.WriteLine(e);
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Программа вычисляет числа Фибоначчи. Количество чисел вводит пользователь");
+            Console.WriteLine();
+            Console.Write("Введите число: ");
 
+            int count = Convert.ToInt16(Console.ReadLine());
 
+            foreach (int e in  GetFibonacci().Take(count))
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
