@@ -48,7 +48,7 @@ namespace SquareAndFibonacci
             {
                 Console.WriteLine(e);
             }
-
+            
             Console.WriteLine();
             Console.WriteLine("Программа вычисляет числа Фибоначчи. Количество чисел вводит пользователь");
             Console.WriteLine();
