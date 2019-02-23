@@ -47,21 +47,27 @@ namespace Graph
             Stack<int> stackSearch = new Stack<int>();
             stackSearch.Push(startIndex);
 
-            isVisited[startIndex] = true;
-
             int startVisitedIndexCheck = 0;
             while (stackSearch.Count != 0)
             {
-                int currentIndex = stackSearch.Pop();
-                action(currentIndex);
-
-                for (int j = Count - 1; j >= 0; j--)
+                int currentIndex = stackSearch.Peek();
+                if (!isVisited[currentIndex])
                 {
-                    if (graph[currentIndex, j] != 0 && !isVisited[j])
+                    stackSearch.Pop();
+                    action(currentIndex);
+                    isVisited[currentIndex] = true;
+
+                    for (int j = Count - 1; j >= 0; j--)
                     {
-                        stackSearch.Push(j);
-                        isVisited[j] = true;
+                        if (graph[currentIndex, j] != 0 && !isVisited[j])
+                        {
+                            stackSearch.Push(j);
+                        }
                     }
+                }
+                else
+                {
+                    stackSearch.Pop();
                 }
 
                 if (stackSearch.Count == 0)
@@ -71,10 +77,7 @@ namespace Graph
                         if (!isVisited[k])
                         {
                             startVisitedIndexCheck = k + 1;
-
                             stackSearch.Push(k);
-                            isVisited[k] = true;
-
                             break;
                         }
                     }
@@ -139,11 +142,11 @@ namespace Graph
                 throw new IndexOutOfRangeException("ОШИБКА: стартовый индекс ОБХОДА В ШИРИНУ вне диапазона индексов графа");
             }
 
-            bool[] isVisites = new bool[Count];
+            bool[] isVisited = new bool[Count];
 
             Queue<int> queueSearch = new Queue<int>();
             queueSearch.Enqueue(startIndex);
-            isVisites[startIndex] = true;
+            isVisited[startIndex] = true;
 
             int startVisitedIndexCheck = 0;
             while (queueSearch.Count != 0)
@@ -153,10 +156,10 @@ namespace Graph
 
                 for (int j = 0; j < Count; j++)
                 {
-                    if (graph[currentIndex, j] != 0 && !isVisites[j])
+                    if (graph[currentIndex, j] != 0 && !isVisited[j])
                     {
                         queueSearch.Enqueue(j);
-                        isVisites[j] = true;
+                        isVisited[j] = true;
                     }
                 }
 
@@ -164,10 +167,10 @@ namespace Graph
                 {
                     for (int k = startVisitedIndexCheck; k < Count; k++)
                     {
-                        if (!isVisites[k])
+                        if (!isVisited[k])
                         {
                             queueSearch.Enqueue(k);
-                            isVisites[k] = true;
+                            isVisited[k] = true;
                             startVisitedIndexCheck = k + 1;
 
                             break;
