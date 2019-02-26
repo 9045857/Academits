@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambda", "Lambda\Lambda.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareAndFibonacci", "SquareAndFibonacci\SquareAndFibonacci.csproj", "{BDB54FC0-7A54-44BA-A5F3-C068025FA1A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L16Streams", "L16Streams\L16Streams.csproj", "{28F509F1-5018-4722-BC85-CDA1D5822DC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{BDB54FC0-7A54-44BA-A5F3-C068025FA1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDB54FC0-7A54-44BA-A5F3-C068025FA1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDB54FC0-7A54-44BA-A5F3-C068025FA1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F509F1-5018-4722-BC85-CDA1D5822DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F509F1-5018-4722-BC85-CDA1D5822DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F509F1-5018-4722-BC85-CDA1D5822DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F509F1-5018-4722-BC85-CDA1D5822DC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
