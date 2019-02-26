@@ -50,10 +50,9 @@ namespace Graph
             int startVisitedIndexCheck = 0;
             while (stackSearch.Count != 0)
             {
-                int currentIndex = stackSearch.Peek();
+                int currentIndex = stackSearch.Pop();
                 if (!isVisited[currentIndex])
                 {
-                    stackSearch.Pop();
                     action(currentIndex);
                     isVisited[currentIndex] = true;
 
@@ -64,10 +63,6 @@ namespace Graph
                             stackSearch.Push(j);
                         }
                     }
-                }
-                else
-                {
-                    stackSearch.Pop();
                 }
 
                 if (stackSearch.Count == 0)
