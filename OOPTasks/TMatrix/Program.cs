@@ -2,9 +2,6 @@ using System;
 
 namespace TMatrix
 {
-    /// <summary>
-    /// Done
-    /// </summary>
     class Program
     {
         static void Main(string[] args)
