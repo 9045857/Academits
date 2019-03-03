@@ -34,7 +34,7 @@ namespace L16Streams
                             int read = 0;
                             int off = 0;
 
-                            while ((read = reader.Read(res, off, res.Length - off)) > 0)
+                            while ((read = reader.Read(res, off, res.Length - off)) >= 0)
                             {
                                 off += read;
                             }
