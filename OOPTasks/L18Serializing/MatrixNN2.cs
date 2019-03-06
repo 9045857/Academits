@@ -25,9 +25,9 @@ namespace L18Serializing
             int matrixSize = matrix.GetLength(0);
             this.matrix = new double[matrixSize, matrixSize];
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < matrixSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < matrixSize; j++)
                 {
                     this.matrix[i, j] = matrix[i, j];
                 }

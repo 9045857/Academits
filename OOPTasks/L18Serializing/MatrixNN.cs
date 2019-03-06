@@ -39,7 +39,7 @@ namespace L18Serializing
         {
             if (info == null)
             {
-                throw new System.ArgumentNullException("info");
+                throw new System.ArgumentNullException(nameof(info));
             }
 
             int matrixSize = (int)info.GetValue("matrixSize", typeof(int));
@@ -48,7 +48,7 @@ namespace L18Serializing
 
             for (int i = 0; i < matrixSize; i++)
             {
-                string key = i.ToString() + ", " + i.ToString();
+                string key = i + "," + i;
                 matrix[i, i] = (double)info.GetValue(key, typeof(double));
             }
 
@@ -56,7 +56,7 @@ namespace L18Serializing
             {
                 for (int j = 0; j < i; j++)
                 {
-                    string key = i.ToString() + ", " + j.ToString();
+                    string key = i + "," + j;
                     matrix[i, j] = (double)info.GetValue(key, typeof(double));
 
                     matrix[j, i] = matrix[i, j];
@@ -67,7 +67,9 @@ namespace L18Serializing
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
-                throw new System.ArgumentNullException("info");
+            {
+                throw new System.ArgumentNullException(nameof(info));
+            }
 
             int matrixSize = matrix.GetLength(0);
 
@@ -77,7 +79,7 @@ namespace L18Serializing
             {
                 for (int j = 0; j < i + 1; j++)
                 {
-                    string key = i.ToString() + ", " + j.ToString();
+                    string key = i + "," + j;
                     info.AddValue(key, matrix[i, j]);
                 }
             }

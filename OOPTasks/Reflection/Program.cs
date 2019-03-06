@@ -4,7 +4,10 @@ using System.Reflection;
 namespace Reflection
 {
     class Program
-    {
+    {/// <summary>
+    /// Done
+    /// </summary>
+    /// <param name="args"></param>
         static void Main(string[] args)
         {
             //Задача

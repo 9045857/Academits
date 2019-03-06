@@ -17,7 +17,7 @@ namespace L18Serializing
             //•Используйте методы с атрибутами OnSerializing, OnDeserialized
 
             Console.WriteLine("Задача 1. Сериализация/десериализация объекта");
-            SolveTast1();
+            SolveTask1();
             Console.WriteLine();
 
             // Задача 2
@@ -30,11 +30,11 @@ namespace L18Serializing
             //•Сравнить размер файла
 
             Console.WriteLine("Задача 2. Пользовательская Сериализация/десериализация объекта");
-            SolveTast2();
+            SolveTask2();
             Console.WriteLine();
         }
 
-        static void SolveTast2()
+        static void SolveTask2()
         {
             double[,] matrix =
             {
@@ -85,7 +85,7 @@ namespace L18Serializing
             Console.WriteLine(matrixNN4);
         }
 
-        static void SolveTast1()
+        static void SolveTask1()
         {
             string fileName = "serialize";
 
