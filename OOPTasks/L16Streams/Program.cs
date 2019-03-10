@@ -29,7 +29,7 @@ namespace L16Streams
                     {
                         byte[] res = new byte[100000];
 
-                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        while (true)
                         {
                             int read = 0;
                             int off = 0;
@@ -39,9 +39,13 @@ namespace L16Streams
                                 off += read;
                             }
 
-                            writer.Write(res, 0, off);
-                        }
+                            if (off == 0)
+                            {
+                                break;
+                            }
 
+                            writer.Write(res, 0, off);                            
+                        }
                     }
                 }
 

@@ -51,7 +51,7 @@ namespace L19Threads
                 {
                     indexList.Insert(indexList.Count, i);
                     Thread.Sleep(1);
-                }
+                } 
             };
 
             Thread thread1 = new Thread(new ThreadStart(action));

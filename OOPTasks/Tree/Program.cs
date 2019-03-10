@@ -92,6 +92,7 @@ namespace Tree
 
             tree2.BreadthFirstSearch(action);
 
+            Console.ReadLine();
         }
     }
 }
