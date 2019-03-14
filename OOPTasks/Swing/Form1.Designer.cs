@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
@@ -46,11 +47,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(182, 181);
+            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+            this.button1.Location = new System.Drawing.Point(177, 170);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 45);
+            this.button1.Size = new System.Drawing.Size(83, 67);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Конвертировать";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
