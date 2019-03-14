@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Swing
 {
@@ -133,5 +134,7 @@ namespace Swing
         {
             DoOnChangingInputType();
         }
+
+        
     }
 }
