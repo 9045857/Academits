@@ -54,8 +54,7 @@ namespace Swing
                     "Ошибка: не корректные данные.",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information,
-                    MessageBoxDefaultButton.Button1,
-                    MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBoxDefaultButton.Button1);
             }
         }
 
