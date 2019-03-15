@@ -36,7 +36,7 @@ namespace ConsumerManager
             // получение одного элемента
             lock (obj)
             {
-                while (list.Count() <= 0)
+                while (list.Count <= 0)
                 {
                     Monitor.Wait(obj);
                 }
@@ -52,7 +52,7 @@ namespace ConsumerManager
             // добавление в список
             lock (obj)
             {
-                while (list.Count() >= CAPACITY)
+                while (list.Count >= CAPACITY)
                 {
                     Monitor.Wait(obj);
                 }
