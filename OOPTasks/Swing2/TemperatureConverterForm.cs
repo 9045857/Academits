@@ -114,6 +114,7 @@ namespace Swing2
             inputPanel.Left = spaceWidth;
 
             outputPanel.Left = outputGroupBox.Left;
+            outputPanel.Width = outputGroupBox.Width;
 
             convertButton.Left = spaceWidth;
             convertButton.Width = 2 * radioButtonGroupWidth + spaceWidth;
