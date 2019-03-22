@@ -69,6 +69,7 @@
             // outputLabel
             // 
             this.outputLabel.AutoSize = true;
+            this.outputLabel.ForeColor = System.Drawing.Color.DarkRed;
             this.outputLabel.Location = new System.Drawing.Point(33, 6);
             this.outputLabel.Name = "outputLabel";
             this.outputLabel.Size = new System.Drawing.Size(46, 17);
@@ -104,11 +105,12 @@
             // 
             // convertButton
             // 
+            this.convertButton.ForeColor = System.Drawing.Color.DarkRed;
             this.convertButton.Location = new System.Drawing.Point(4, 219);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(343, 28);
             this.convertButton.TabIndex = 6;
-            this.convertButton.Text = "конвертировать";
+            this.convertButton.Text = "к о н в е р т и р о в а т ь";
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.button1_Click);
             // 

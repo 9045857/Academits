@@ -174,8 +174,8 @@ namespace Swing2
 
         private void PrepareForm()
         {
-            inputTypes = new ITemperatureType[] { new Kelvin(), new Celsius(), new Fahrenheit() };
-            outputTypes = new ITemperatureType[] { new Kelvin(), new Celsius() };
+            inputTypes = new ITemperatureType[] { new Celsius(), new Kelvin(), new Fahrenheit() };
+            outputTypes = new ITemperatureType[] { new Kelvin(), new Celsius(), new Fahrenheit() };
 
             PrepareRadioButtonGroup(inputTypes, inputGroupBox);
             PrepareRadioButtonGroup(outputTypes, outputGroupBox);
