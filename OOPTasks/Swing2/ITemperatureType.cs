@@ -6,7 +6,7 @@ namespace Swing2
     {
         string Name { get; }
         string Symbol { get; }
-        Func<double, double> ToCelsius { get; }
-        Func<double, double> FromCelsius { get; }
+        double ToCelsius(double temperature);
+        double FromCelsius(double celsiusTemperature);
     }
 }

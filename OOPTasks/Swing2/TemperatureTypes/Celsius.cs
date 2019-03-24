@@ -8,8 +8,14 @@ namespace Swing2.TemperatureTypes
 
         public string Symbol => "°C";
 
-        public Func<double, double> ToCelsius => (k) => k;
+        public double FromCelsius(double celsiusTemperature)
+        {
+            return celsiusTemperature;
+        }
 
-        public Func<double, double> FromCelsius => (c) => c;
+        public double ToCelsius(double temperature)
+        {
+            return temperature;
+        }
     }
 }

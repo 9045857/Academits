@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Swing2
 {
@@ -128,21 +129,14 @@ namespace Swing2
                 {
                     string radioButtonName = control.Name;
 
-                    foreach (ITemperatureType type in inputTypes)
+                    ITemperatureType type = inputTypes.FirstOrDefault(x => string.Concat(groupBox.Name, x.Name) == radioButtonName);
+
+                    if (!Equals(type, null))
                     {
-                        if (radioButtonName.IndexOf(type.Name) != -1)
-                        {
-                            return type;
-                        }
+                        return type;
                     }
 
-                    foreach (ITemperatureType type in outputTypes)
-                    {
-                        if (radioButtonName.IndexOf(type.Name) != -1)
-                        {
-                            return type;
-                        }
-                    }
+                    return outputTypes.FirstOrDefault(x => string.Concat(groupBox.Name, x.Name) == radioButtonName);
                 }
             }
 
@@ -157,13 +151,10 @@ namespace Swing2
             ITemperatureType outputType = GetTemperatureType(outputGroupBox);
 
             string inputTextBoxText = inputTextBox.Text;
-            double inputTextBoxData;
 
-            if (Double.TryParse(inputTextBoxText, out inputTextBoxData))
+            if (double.TryParse(inputTextBoxText, out double inputTextBoxData))
             {
-                double inputCelsiusData = inputType.ToCelsius(inputTextBoxData);
-                double outputTypeData = Math.Round(outputType.FromCelsius(inputCelsiusData), 2);
-
+                double outputTypeData = Math.Round(TemperatureConverter.Convert(inputTextBoxData, inputType, outputType), 2);
                 outputLabel.Text = string.Format("{0} {1}", outputTypeData, outputType.Symbol);
             }
             else
@@ -189,9 +180,8 @@ namespace Swing2
         private void ConvertTemperatureWithErrorMessage()
         {
             string inputTemperature = inputTextBox.Text;
-            double inputData;
 
-            if (Double.TryParse(inputTemperature, out inputData))
+            if (double.TryParse(inputTemperature, out double inputData))
             {
                 ConvertTemperature();
             }
@@ -201,7 +191,7 @@ namespace Swing2
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ConvertButton_Click(object sender, EventArgs e)
         {
             ConvertTemperatureWithErrorMessage();
         }

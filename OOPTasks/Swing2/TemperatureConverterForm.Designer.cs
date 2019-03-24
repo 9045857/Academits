@@ -112,7 +112,7 @@
             this.convertButton.TabIndex = 6;
             this.convertButton.Text = "к о н в е р т и р о в а т ь";
             this.convertButton.UseVisualStyleBackColor = true;
-            this.convertButton.Click += new System.EventHandler(this.button1_Click);
+            this.convertButton.Click += new System.EventHandler(this.ConvertButton_Click);
             // 
             // TemperatureConverterForm
             // 
