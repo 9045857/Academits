@@ -9,7 +9,5 @@
 
         public const int yDeltaBetweenControls = 10;
         public const int xDeltaBetweenControls = 10;
-
-        public const int windowTitleHeight = 40;
     }
 }
